@@ -1,0 +1,68 @@
+/* Status Badges */
+.badge-draft, .badge-foreman, .badge-super_admin {
+  display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.125rem 0.625rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;
+  background-color: #f1f5f9; color: #475569;
+}
+.dark .badge-draft, .dark .badge-foreman, .dark .badge-super_admin {
+  background-color: #1e293b; color: #94a3b8;
+}
+.badge-submitted, .badge-under_review, .badge-arborist {
+  display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.125rem 0.625rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;
+  background-color: #fef3c7; color: #b45309;
+}
+.dark .badge-submitted, .dark .badge-under_review, .dark .badge-arborist {
+  background-color: #451a03; color: #fbbf24;
+}
+.badge-approved, .badge-reconciled, .badge-paid, .badge-billing {
+  display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.125rem 0.625rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;
+  background-color: #d1fae5; color: #059669;
+}
+.dark .badge-approved, .dark .badge-reconciled, .dark .badge-paid, .dark .badge-billing {
+  background-color: #064e3b; color: #34d399;
+}
+.badge-rejected, .badge-disputed, .badge-non_billable {
+  display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.125rem 0.625rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;
+  background-color: #fee2e2; color: #dc2626;
+}
+.dark .badge-rejected, .dark .badge-disputed, .dark .badge-non_billable {
+  background-color: #7f1d1d; color: #fca5a5;
+}
+.badge-changes_requested, .badge-detail_admin {
+  display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.125rem 0.625rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;
+  background-color: #dbeafe; color: #2563eb;
+}
+.dark .badge-changes_requested, .dark .badge-detail_admin {
+  background-color: #1e3a5f; color: #93c5fd;
+}
+.badge-invoiced {
+  display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.125rem 0.625rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;
+  background-color: #ede9fe; color: #7c3aed;
+}
+.dark .badge-invoiced {
+  background-color: #2e1065; color: #a78bfa;
+}
+.badge-archived {
+  display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.125rem 0.625rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;
+  background-color: #e2e8f0; color: #64748b;
+}
+.dark .badge-archived {
+  background-color: #0f172a; color: #94a3b8;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+.dark ::-webkit-scrollbar-thumb { background: #475569; }
+
+/* Dark mode transitions */
+body, .bg-white, .bg-surface-50, .border-surface-200, .text-surface-800 {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+main > * { animation: fadeIn 0.2s ease-out; }

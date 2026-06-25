@@ -1,0 +1,84 @@
+<h2 class="text-xl font-bold text-surface-800 dark:text-white mb-1">Arborist Dashboard</h2>
+<p class="text-sm text-surface-500 dark:text-surface-400 mb-6">Review and verify police detail slips.</p>
+
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+  <% const cards = [
+    { label: 'Pending Review', value: stats.pending, icon: 'fa-clock', color: 'text-yellow-600 dark:text-yellow-400', bg: 'bg-yellow-50 dark:bg-yellow-900/20' },
+    { label: 'Approved', value: stats.approved, icon: 'fa-check-circle', color: 'text-green-600 dark:text-green-400', bg: 'bg-green-50 dark:bg-green-900/20' },
+    { label: 'Total Reviewed', value: stats.reviewed, icon: 'fa-clipboard-check', color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-50 dark:bg-blue-900/20' },
+    { label: 'Changes Requested', value: stats.changes, icon: 'fa-pen-to-square', color: 'text-orange-600 dark:text-orange-400', bg: 'bg-orange-50 dark:bg-orange-900/20' }
+  ] %>
+  <% cards.forEach(card => { %>
+    <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-4">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-2xl font-bold text-surface-800 dark:text-white"><%= card.value %></span>
+        <div class="w-9 h-9 rounded-lg <%= card.bg %> flex items-center justify-center"><i class="fas <%= card.icon %> <%= card.color %>"></i></div>
+      </div>
+      <p class="text-xs text-surface-500 dark:text-surface-400 font-medium"><%= card.label %></p>
+    </div>
+  <% }) %>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <div class="lg:col-span-2">
+    <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700">
+      <div class="px-5 py-4 border-b border-surface-200 dark:border-surface-700 flex items-center justify-between">
+        <h3 class="font-semibold text-surface-800 dark:text-white text-sm">Pending Review (<%= pendingReview.length %>)</h3>
+        <a href="/slips?status=submitted" class="text-xs text-primary-600 dark:text-primary-400 hover:underline">View All</a>
+      </div>
+      <div class="p-5">
+        <% if (pendingReview.length === 0) { %>
+          <div class="text-center py-8 text-surface-400 dark:text-surface-500">
+            <i class="fas fa-check-circle text-3xl mb-2 text-green-400"></i>
+            <p class="text-sm">All caught up! No pending slips to review.</p>
+          </div>
+        <% } else { %>
+          <div class="space-y-3">
+            <% pendingReview.forEach(slip => { %>
+              <div class="border border-surface-200 dark:border-surface-700 rounded-lg p-4 hover:bg-surface-50 dark:hover:bg-surface-700/50 transition-colors cursor-pointer" onclick="window.location='/slips/view/<%= slip.id %>'">
+                <div class="flex items-start justify-between mb-2">
+                  <div>
+                    <span class="font-medium text-surface-800 dark:text-white text-sm"><%= slip.slip_number %></span>
+                    <span class="text-xs text-surface-400 ml-2"><%= slip.org_name || 'N/A' %></span>
+                  </div>
+                  <span class="badge-submitted">Pending</span>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-surface-500">
+                  <div><span class="text-surface-400">Project:</span> <%= slip.project_number %></div>
+                  <div><span class="text-surface-400">Officer:</span> <%= slip.officer_name %></div>
+                  <div><span class="text-surface-400">Hours:</span> <%= slip.total_hours %></div>
+                  <div><span class="text-surface-400">Foreman:</span> <%= slip.foreman_name %></div>
+                </div>
+                <div class="mt-2 flex gap-2">
+                  <a href="/slips/view/<%= slip.id %>" class="text-xs bg-primary-600 hover:bg-primary-700 text-white px-3 py-1.5 rounded-lg transition-colors"><i class="fas fa-eye mr-1"></i>Review</a>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700">
+      <div class="px-5 py-4 border-b border-surface-200 dark:border-surface-700">
+        <h3 class="font-semibold text-surface-800 dark:text-white text-sm">Recent Reviews</h3>
+      </div>
+      <div class="p-5 space-y-3 max-h-96 overflow-y-auto">
+        <% if (recentReviews.length === 0) { %>
+          <p class="text-sm text-surface-400">No reviews yet.</p>
+        <% } else { %>
+          <% recentReviews.forEach(r => { %>
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-surface-700 dark:text-surface-300"><%= r.slip_number %></p>
+                <p class="text-xs text-surface-400"><%= r.project_number %></p>
+              </div>
+              <span class="badge-<%= r.status %>"><%= r.status.replace('_', ' ') %></span>
+            </div>
+          <% }) %>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>

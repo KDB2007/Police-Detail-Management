@@ -1,0 +1,22 @@
+services:
+  pdm:
+    build: .
+    container_name: pdm-platform
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      HOST: 0.0.0.0
+      SESSION_SECRET: ${SESSION_SECRET:-change-this-to-a-random-secret}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:4000}
+    volumes:
+      - pdm_data:/app/database
+      - pdm_uploads:/app/public/uploads
+      - pdm_logs:/app/logs
+
+volumes:
+  pdm_data:
+  pdm_uploads:
+  pdm_logs:

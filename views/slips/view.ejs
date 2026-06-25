@@ -1,0 +1,206 @@
+<div class="mb-4">
+  <a href="/slips" class="text-sm text-primary-600 dark:text-primary-400 hover:underline"><i class="fas fa-arrow-left mr-1"></i>Back to Slips</a>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <!-- Main Content -->
+  <div class="lg:col-span-2 space-y-6">
+    <!-- Header Card -->
+    <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-6">
+      <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6">
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <h2 class="text-xl font-bold text-surface-800 dark:text-white"><%= slip.slip_number %></h2>
+            <span class="badge-<%= slip.status %> text-sm"><%= slip.status.replace('_', ' ') %></span>
+          </div>
+          <p class="text-sm text-surface-500"><%= slip.project_number %> — <%= slip.project_name %></p>
+          <p class="text-sm text-surface-500">WO: <%= slip.work_order_number || 'N/A' %></p>
+        </div>
+        <div class="flex gap-2 flex-wrap">
+          <% if (slip.status === 'draft' || slip.status === 'changes_requested') { %>
+            <% if (user.role === 'foreman' && slip.foreman_id === user.id) { %>
+              <form method="POST" action="/slips/submit/<%= slip.id %>" class="inline">
+                <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white text-xs font-medium px-4 py-2 rounded-lg transition-colors"><i class="fas fa-paper-plane mr-1"></i>Submit for Review</button>
+              </form>
+              <a href="/slips/edit/<%= slip.id %>" class="bg-surface-200 dark:bg-surface-700 hover:bg-surface-300 dark:hover:bg-surface-600 text-surface-700 dark:text-surface-200 text-xs font-medium px-4 py-2 rounded-lg transition-colors"><i class="fas fa-pen mr-1"></i>Edit</a>
+            <% } %>
+          <% } %>
+          <% if (slip.status === 'submitted' && user.role === 'arborist') { %>
+            <button onclick="document.getElementById('reviewModal').classList.remove('hidden')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium px-4 py-2 rounded-lg transition-colors"><i class="fas fa-clipboard-check mr-1"></i>Review Slip</button>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+        <div class="bg-surface-50 dark:bg-surface-700/50 rounded-lg p-3">
+          <p class="text-xs text-surface-400 uppercase tracking-wider mb-1">Officer</p>
+          <p class="font-medium text-surface-800 dark:text-surface-200"><%= slip.officer_name %></p>
+          <p class="text-surface-500 text-xs">Badge: <%= slip.officer_badge || 'N/A' %> • <%= slip.officer_department || 'N/A' %></p>
+        </div>
+        <div class="bg-surface-50 dark:bg-surface-700/50 rounded-lg p-3">
+          <p class="text-xs text-surface-400 uppercase tracking-wider mb-1">Shift Details</p>
+          <p class="font-medium text-surface-800 dark:text-surface-200"><%= new Date(slip.shift_start).toLocaleString() %> — <%= new Date(slip.shift_end).toLocaleString() %></p>
+          <p class="text-surface-500 text-xs"><%= slip.total_hours %> hours @ $<%= Number(slip.rate_per_hour).toFixed(2) %>/hr</p>
+        </div>
+        <div class="bg-surface-50 dark:bg-surface-700/50 rounded-lg p-3">
+          <p class="text-xs text-surface-400 uppercase tracking-wider mb-1">Location</p>
+          <p class="font-medium text-surface-800 dark:text-surface-200"><%= slip.location_details || 'N/A' %></p>
+          <p class="text-surface-500 text-xs">Crew: <%= slip.crew_info || 'N/A' %></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Attachments -->
+    <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-6">
+      <h3 class="font-semibold text-surface-800 dark:text-white text-sm mb-4">Attachments</h3>
+      <% if (attachments.length === 0) { %>
+        <p class="text-sm text-surface-400">No attachments</p>
+      <% } else { %>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <% attachments.forEach(a => { %>
+            <a href="/slips/download/<%= a.id %>" class="flex items-center gap-3 p-3 bg-surface-50 dark:bg-surface-700/50 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 transition-colors">
+              <i class="fas fa-paperclip text-surface-400"></i>
+              <span class="text-sm text-surface-700 dark:text-surface-300 truncate"><%= a.filename %></span>
+            </a>
+          <% }) %>
+        </div>
+      <% } %>
+      <% if (slip.status === 'draft' || slip.status === 'changes_requested') { %>
+        <form method="POST" action="/slips/upload/<%= slip.id %>" enctype="multipart/form-data" class="mt-4 pt-4 border-t border-surface-200 dark:border-surface-700">
+          <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Upload Attachments</label>
+          <div class="flex gap-2">
+            <input type="file" name="attachments" multiple class="flex-1 text-sm text-surface-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-primary-50 dark:file:bg-primary-900/20 file:text-primary-700 hover:file:bg-primary-100">
+            <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white text-xs font-medium px-4 py-2 rounded-lg transition-colors">Upload</button>
+          </div>
+        </form>
+      <% } %>
+    </div>
+
+    <!-- Invoices -->
+    <% if (invoices.length > 0) { %>
+      <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-6">
+        <h3 class="font-semibold text-surface-800 dark:text-white text-sm mb-4">Related Invoices</h3>
+        <div class="space-y-2">
+          <% invoices.forEach(inv => { %>
+            <a href="/invoices/view/<%= inv.id %>" class="flex items-center justify-between p-3 bg-surface-50 dark:bg-surface-700/50 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 transition-colors">
+              <div>
+                <span class="font-medium text-surface-700 dark:text-surface-300 text-sm"><%= inv.invoice_number %></span>
+                <span class="text-surface-400 text-xs ml-2">$<%= Number(inv.grand_total).toFixed(2) %></span>
+              </div>
+              <span class="badge-<%= inv.status %> text-xs"><%= inv.status.replace('_', ' ') %></span>
+            </a>
+          <% }) %>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- Notes -->
+    <% if (slip.notes) { %>
+      <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-6">
+        <h3 class="font-semibold text-surface-800 dark:text-white text-sm mb-2">Notes</h3>
+        <p class="text-sm text-surface-600 dark:text-surface-300"><%= slip.notes %></p>
+      </div>
+    <% } %>
+    <% if (slip.non_billable_reason) { %>
+      <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-6">
+        <h3 class="font-semibold text-amber-800 dark:text-amber-300 text-sm mb-1"><i class="fas fa-triangle-exclamation mr-1"></i>Non-Billable Reason</h3>
+        <p class="text-sm text-amber-700 dark:text-amber-400"><%= slip.non_billable_reason %></p>
+      </div>
+    <% } %>
+    <% if (slip.change_request_notes) { %>
+      <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6">
+        <h3 class="font-semibold text-blue-800 dark:text-blue-300 text-sm mb-1"><i class="fas fa-pen-to-square mr-1"></i>Change Request Notes</h3>
+        <p class="text-sm text-blue-700 dark:text-blue-400"><%= slip.change_request_notes %></p>
+      </div>
+    <% } %>
+    <% if (slip.rejection_reason) { %>
+      <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6">
+        <h3 class="font-semibold text-red-800 dark:text-red-300 text-sm mb-1"><i class="fas fa-xmark mr-1"></i>Rejection Reason</h3>
+        <p class="text-sm text-red-700 dark:text-red-400"><%= slip.rejection_reason %></p>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="space-y-6">
+    <!-- Status Timeline -->
+    <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-6">
+      <h3 class="font-semibold text-surface-800 dark:text-white text-sm mb-4">Status Timeline</h3>
+      <div class="space-y-0">
+        <% statusHistory.forEach((h, i) => { %>
+          <div class="flex gap-3 pb-4 relative">
+            <% if (i < statusHistory.length - 1) { %><div class="absolute left-[11px] top-5 bottom-0 w-0.5 bg-surface-200 dark:bg-surface-600"></div><% } %>
+            <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5 <%= i === statusHistory.length - 1 ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-600' : 'bg-surface-100 dark:bg-surface-700 text-surface-400' %>">
+              <i class="fas <%= i === statusHistory.length - 1 ? 'fa-circle' : 'fa-circle' %> text-[8px]"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+              <p class="text-sm font-medium text-surface-800 dark:text-surface-200"><%= h.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) %></p>
+              <p class="text-xs text-surface-500"><%= h.changed_by_name || 'System' %> • <%= new Date(h.created_at).toLocaleString() %></p>
+              <% if (h.comments) { %><p class="text-xs text-surface-400 mt-0.5"><%= h.comments %></p><% } %>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+
+    <!-- Info Card -->
+    <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-6">
+      <h3 class="font-semibold text-surface-800 dark:text-white text-sm mb-4">Details</h3>
+      <dl class="space-y-3 text-sm">
+        <div class="flex justify-between"><dt class="text-surface-400">Foreman</dt><dd class="text-surface-700 dark:text-surface-300 font-medium"><%= slip.foreman_name %></dd></div>
+        <div class="flex justify-between"><dt class="text-surface-400">Vendor</dt><dd class="text-surface-700 dark:text-surface-300"><%= slip.vendor_name || 'N/A' %></dd></div>
+        <div class="flex justify-between"><dt class="text-surface-400">Reviewer</dt><dd class="text-surface-700 dark:text-surface-300"><%= slip.reviewer_name || 'Not yet reviewed' %></dd></div>
+        <div class="flex justify-between"><dt class="text-surface-400">Submitted</dt><dd class="text-surface-700 dark:text-surface-300"><%= slip.submitted_at ? new Date(slip.submitted_at).toLocaleString() : '-' %></dd></div>
+        <div class="flex justify-between"><dt class="text-surface-400">Reviewed</dt><dd class="text-surface-700 dark:text-surface-300"><%= slip.reviewed_at ? new Date(slip.reviewed_at).toLocaleString() : '-' %></dd></div>
+        <div class="flex justify-between"><dt class="text-surface-400">Created</dt><dd class="text-surface-700 dark:text-surface-300"><%= new Date(slip.created_at).toLocaleString() %></dd></div>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<!-- Review Modal -->
+<% if (slip.status === 'submitted' && user.role === 'arborist') { %>
+<div id="reviewModal" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center hidden" onclick="if(event.target===this) document.getElementById('reviewModal').classList.add('hidden')">
+  <div class="bg-white dark:bg-surface-800 rounded-2xl shadow-2xl w-full max-w-lg mx-4 p-6">
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="text-lg font-bold text-surface-800 dark:text-white">Review Slip</h3>
+      <button onclick="document.getElementById('reviewModal').classList.add('hidden')" class="text-surface-400 hover:text-surface-600"><i class="fas fa-times"></i></button>
+    </div>
+    <form method="POST" action="/slips/review/<%= slip.id %>" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-2">Decision</label>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="submit" name="action" value="approved" class="p-3 border-2 border-green-200 dark:border-green-800 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors text-center" onclick="this.form.action='/slips/review/<%= slip.id %>'">
+            <i class="fas fa-check-circle text-green-600 text-lg"></i>
+            <p class="text-sm font-medium text-green-700 dark:text-green-300 mt-1">Approve</p>
+          </button>
+          <button type="submit" name="action" value="changes_requested" class="p-3 border-2 border-blue-200 dark:border-blue-800 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors text-center">
+            <i class="fas fa-pen-to-square text-blue-600 text-lg"></i>
+            <p class="text-sm font-medium text-blue-700 dark:text-blue-300 mt-1">Request Changes</p>
+          </button>
+          <button type="submit" name="action" value="non_billable" class="p-3 border-2 border-amber-200 dark:border-amber-800 rounded-lg hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors text-center">
+            <i class="fas fa-ban text-amber-600 text-lg"></i>
+            <p class="text-sm font-medium text-amber-700 dark:text-amber-300 mt-1">Non-Billable</p>
+          </button>
+          <button type="submit" name="action" value="rejected" class="p-3 border-2 border-red-200 dark:border-red-800 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-center">
+            <i class="fas fa-xmark text-red-600 text-lg"></i>
+            <p class="text-sm font-medium text-red-700 dark:text-red-300 mt-1">Reject</p>
+          </button>
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Comments</label>
+        <textarea name="comments" rows="3" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" placeholder="Add your comments..."></textarea>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Non-Billable Reason (if applicable)</label>
+        <input type="text" name="non_billable_reason" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" placeholder="Reason for non-billable...">
+      </div>
+      <div class="flex gap-3 pt-2">
+        <button type="submit" class="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-medium px-4 py-2.5 rounded-lg transition-colors text-sm">Submit Review</button>
+        <button type="button" onclick="document.getElementById('reviewModal').classList.add('hidden')" class="px-4 py-2.5 text-sm text-surface-600 dark:text-surface-400 hover:text-surface-800">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+<% } %>

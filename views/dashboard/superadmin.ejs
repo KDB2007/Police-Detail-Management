@@ -1,0 +1,94 @@
+<h2 class="text-xl font-bold text-surface-800 dark:text-white mb-1">Super Admin Dashboard</h2>
+<p class="text-sm text-surface-500 dark:text-surface-400 mb-6">Full system oversight and configuration.</p>
+
+<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 mb-6">
+  <% const cards = [
+    { label: 'Users', value: stats.users, icon: 'fa-users', color: 'text-blue-600', bg: 'bg-blue-50 dark:bg-blue-900/20' },
+    { label: 'Active', value: stats.activeUsers, icon: 'fa-user-check', color: 'text-green-600', bg: 'bg-green-50 dark:bg-green-900/20' },
+    { label: 'Orgs', value: stats.orgs, icon: 'fa-building', color: 'text-violet-600', bg: 'bg-violet-50 dark:bg-violet-900/20' },
+    { label: 'Slips', value: stats.slips, icon: 'fa-file-lines', color: 'text-amber-600', bg: 'bg-amber-50 dark:bg-amber-900/20' },
+    { label: 'Active Slips', value: stats.activeSlips, icon: 'fa-play', color: 'text-cyan-600', bg: 'bg-cyan-50 dark:bg-cyan-900/20' },
+    { label: 'Invoices', value: stats.invoices, icon: 'fa-file-invoice', color: 'text-indigo-600', bg: 'bg-indigo-50 dark:bg-indigo-900/20' },
+    { label: 'Pending Inv.', value: stats.pendingInvoices, icon: 'fa-clock', color: 'text-rose-600', bg: 'bg-rose-50 dark:bg-rose-900/20' },
+    { label: 'Total Billed', value: '$' + Number(stats.totalBilled).toLocaleString('en-US', {minimumFractionDigits: 0}), icon: 'fa-coins', color: 'text-emerald-600', bg: 'bg-emerald-50 dark:bg-emerald-900/20' }
+  ] %>
+  <% cards.forEach(card => { %>
+    <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-3">
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-lg font-bold text-surface-800 dark:text-white"><%= card.value %></span>
+        <div class="w-7 h-7 rounded-lg <%= card.bg %> flex items-center justify-center"><i class="fas <%= card.icon %> <%= card.color %> text-xs"></i></div>
+      </div>
+      <p class="text-xs text-surface-500 dark:text-surface-400 font-medium truncate"><%= card.label %></p>
+    </div>
+  <% }) %>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <div class="lg:col-span-2">
+    <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700">
+      <div class="px-5 py-4 border-b border-surface-200 dark:border-surface-700 flex items-center justify-between">
+        <h3 class="font-semibold text-surface-800 dark:text-white text-sm">Recent Users</h3>
+        <a href="/admin/users" class="text-xs text-primary-600 dark:text-primary-400 hover:underline">Manage</a>
+      </div>
+      <div class="p-5">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead><tr class="text-left text-xs text-surface-500 uppercase tracking-wider"><th class="pb-3 font-medium">Name</th><th class="pb-3 font-medium">Username</th><th class="pb-3 font-medium">Role</th><th class="pb-3 font-medium">Status</th></tr></thead>
+            <tbody class="divide-y divide-surface-100 dark:divide-surface-700">
+              <% recentUsers.forEach(u => { %>
+                <tr class="hover:bg-surface-50 dark:hover:bg-surface-700/50"><td class="py-3 text-surface-800 dark:text-surface-200"><%= u.full_name %></td><td class="py-3 text-surface-500"><%= u.username %></td><td class="py-3"><span class="badge-<%= u.role %>"><%= u.role.replace('_', ' ') %></span></td><td class="py-3"><%- u.is_active ? '<span class="text-green-600 text-xs"><i class="fas fa-circle text-[6px] mr-1"></i>Active</span>' : '<span class="text-red-500 text-xs"><i class="fas fa-circle text-[6px] mr-1"></i>Inactive</span>' %></td></tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 mt-6">
+      <div class="px-5 py-4 border-b border-surface-200 dark:border-surface-700">
+        <h3 class="font-semibold text-surface-800 dark:text-white text-sm">Recent Audit Activity</h3>
+      </div>
+      <div class="p-5 max-h-64 overflow-y-auto">
+        <div class="space-y-2">
+          <% recentAudit.forEach(log => { %>
+            <div class="flex items-start gap-3 text-xs">
+              <div class="w-1.5 h-1.5 rounded-full bg-primary-500 mt-1.5 shrink-0"></div>
+              <div>
+                <span class="font-medium text-surface-700 dark:text-surface-300"><%= log.username %></span>
+                <span class="text-surface-500"> <%= log.action %> </span>
+                <span class="text-surface-400"><%= log.entity_type %> #<%= log.entity_id %></span>
+                <span class="text-surface-400 ml-2"><%= new Date(log.created_at + 'Z').toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }) %> IST</span>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700">
+      <div class="px-5 py-4 border-b border-surface-200 dark:border-surface-700">
+        <h3 class="font-semibold text-surface-800 dark:text-white text-sm">Quick Actions</h3>
+      </div>
+      <div class="p-5 space-y-2">
+        <a href="/admin/users" class="flex items-center gap-3 px-3 py-2.5 bg-surface-50 dark:bg-surface-700 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-600 transition-colors text-sm text-surface-700 dark:text-surface-300"><i class="fas fa-user-plus text-surface-400"></i> Manage Users</a>
+        <a href="/admin/organizations" class="flex items-center gap-3 px-3 py-2.5 bg-surface-50 dark:bg-surface-700 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-600 transition-colors text-sm text-surface-700 dark:text-surface-300"><i class="fas fa-building text-surface-400"></i> Organizations</a>
+        <a href="/admin/audit" class="flex items-center gap-3 px-3 py-2.5 bg-surface-50 dark:bg-surface-700 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-600 transition-colors text-sm text-surface-700 dark:text-surface-300"><i class="fas fa-history text-surface-400"></i> Audit Log</a>
+        <a href="/admin/settings" class="flex items-center gap-3 px-3 py-2.5 bg-surface-50 dark:bg-surface-700 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-600 transition-colors text-sm text-surface-700 dark:text-surface-300"><i class="fas fa-gear text-surface-400"></i> Settings</a>
+        <a href="/reports" class="flex items-center gap-3 px-3 py-2.5 bg-surface-50 dark:bg-surface-700 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-600 transition-colors text-sm text-surface-700 dark:text-surface-300"><i class="fas fa-download text-surface-400"></i> Export Reports</a>
+      </div>
+    </div>
+    <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 mt-4">
+      <div class="px-5 py-4 border-b border-surface-200 dark:border-surface-700">
+        <h3 class="font-semibold text-surface-800 dark:text-white text-sm">Slip Overview</h3>
+      </div>
+      <div class="p-5 space-y-2 max-h-80 overflow-y-auto">
+        <% recentSlips.forEach(s => { %>
+          <div class="flex items-center justify-between py-1">
+            <p class="text-sm text-surface-600 dark:text-surface-300"><%= s.slip_number %></p>
+            <span class="badge-<%= s.status %> text-xs"><%= s.status.replace('_', ' ') %></span>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+</div>

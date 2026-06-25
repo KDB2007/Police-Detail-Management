@@ -1,0 +1,66 @@
+<div class="min-h-screen flex bg-gradient-to-br from-primary-900 via-primary-800 to-surface-900">
+  <div class="flex-1 flex items-center justify-center px-4 py-12">
+    <div class="w-full max-w-md">
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-white/10 backdrop-blur rounded-2xl mb-4 shadow-lg">
+          <i class="fas fa-shield-halved text-white text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-white">Welcome to PDM</h2>
+        <p class="text-primary-200 mt-1">Sign in to your account</p>
+      </div>
+      <div class="bg-white dark:bg-surface-800 rounded-2xl shadow-2xl p-8">
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
+            <i class="fas fa-circle-exclamation"></i><span><%= error %></span>
+          </div>
+        <% } %>
+        <% if (typeof selectedRole !== 'undefined' && selectedRole) { %>
+          <div class="mb-6 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
+            <i class="fas fa-info-circle"></i><span>Logging in as <strong><%= selectedRole.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) %></strong></span>
+          </div>
+        <% } %>
+        <form method="POST" action="/login" class="space-y-5">
+          <% if (typeof selectedRole !== 'undefined' && selectedRole) { %>
+            <input type="hidden" name="role" value="<%= selectedRole %>">
+          <% } %>
+          <div>
+            <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Username</label>
+            <div class="relative">
+              <i class="fas fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-surface-400 text-sm"></i>
+              <input type="text" name="username" required class="w-full pl-10 pr-4 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-surface-800 dark:text-surface-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors text-sm" placeholder="Enter your username">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Password</label>
+            <div class="relative">
+              <i class="fas fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-surface-400 text-sm"></i>
+              <input type="password" name="password" required class="w-full pl-10 pr-4 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-surface-800 dark:text-surface-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors text-sm" placeholder="Enter your password">
+            </div>
+          </div>
+          <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors text-sm flex items-center justify-center gap-2">
+            <i class="fas fa-right-to-bracket"></i>Sign In
+          </button>
+        </form>
+        <div class="mt-6 pt-4 border-t border-surface-200 dark:border-surface-700">
+          <p class="text-xs text-surface-400 dark:text-surface-500 text-center mb-3">Quick Login &mdash; Passwords: <code class="bg-surface-100 dark:bg-surface-700 px-1.5 py-0.5 rounded text-primary-600">password123</code></p>
+          <div class="grid grid-cols-2 gap-2">
+            <% if (typeof selectedRole !== 'undefined' && selectedRole) { %>
+              <div class="col-span-2">
+                <a href="/login?role=<%= selectedRole %>" class="block text-center text-xs bg-surface-100 dark:bg-surface-700 text-surface-600 dark:text-surface-300 px-3 py-2 rounded-lg hover:bg-surface-200 dark:hover:bg-surface-600 transition-colors">Switch role</a>
+              </div>
+            <% } else { %>
+              <a href="/login?role=foreman" class="text-xs bg-surface-100 dark:bg-surface-700 text-surface-600 dark:text-surface-300 px-3 py-2 rounded-lg hover:bg-surface-200 dark:hover:bg-surface-600 transition-colors text-center">Foreman</a>
+              <a href="/login?role=arborist" class="text-xs bg-surface-100 dark:bg-surface-700 text-surface-600 dark:text-surface-300 px-3 py-2 rounded-lg hover:bg-surface-200 dark:hover:bg-surface-600 transition-colors text-center">Arborist</a>
+              <a href="/login?role=billing" class="text-xs bg-surface-100 dark:bg-surface-700 text-surface-600 dark:text-surface-300 px-3 py-2 rounded-lg hover:bg-surface-200 dark:hover:bg-surface-600 transition-colors text-center">Billing</a>
+              <a href="/login?role=detail_admin" class="text-xs bg-surface-100 dark:bg-surface-700 text-surface-600 dark:text-surface-300 px-3 py-2 rounded-lg hover:bg-surface-200 dark:hover:bg-surface-600 transition-colors text-center">Detail Admin</a>
+              <a href="/login?role=super_admin" class="text-xs bg-surface-100 dark:bg-surface-700 text-surface-600 dark:text-surface-300 px-3 py-2 rounded-lg hover:bg-surface-200 dark:hover:bg-surface-600 transition-colors text-center">Super Admin</a>
+            <% } %>
+          </div>
+        </div>
+      </div>
+      <p class="text-center mt-6">
+        <a href="/" class="text-primary-300 hover:text-primary-200 text-sm transition-colors"><i class="fas fa-arrow-left mr-1"></i> Back to role selection</a>
+      </p>
+    </div>
+  </div>
+</div>

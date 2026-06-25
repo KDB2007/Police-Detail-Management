@@ -1,0 +1,12 @@
+node_modules
+npm-debug.log
+.env
+.git
+.gitignore
+*.md
+.DS_Store
+logs/*
+!logs/.gitkeep
+database/pdm.db
+database/pdm.db-wal
+database/pdm.db-shm

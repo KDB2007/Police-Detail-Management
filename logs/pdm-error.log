@@ -1,0 +1,139 @@
+2026-06-25 12:09:25 +05:30: Warning: connect.session() MemoryStore is not
+2026-06-25 12:09:25 +05:30: designed for a production environment, as it will leak
+2026-06-25 12:09:25 +05:30: memory, and will not scale past a single process.
+2026-06-25 12:20:19 +05:30: Error: column index out of range
+2026-06-25 12:20:19 +05:30:     at stmt.get (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/database/schema.js:27:14)
+2026-06-25 12:20:19 +05:30:     at Object.arborist (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/routes/dashboard.js:41:105)
+2026-06-25 12:20:19 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/routes/dashboard.js:112:25
+2026-06-25 12:20:19 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:20:19 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/route.js:149:13)
+2026-06-25 12:20:19 +05:30:     at requireAuth (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/middleware/auth.js:8:3)
+2026-06-25 12:20:19 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:20:19 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/route.js:149:13)
+2026-06-25 12:20:19 +05:30:     at Route.dispatch (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/route.js:119:3)
+2026-06-25 12:20:19 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:20:19 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:284:15
+2026-06-25 12:20:19 +05:30:     at router.process_params (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:346:12)
+2026-06-25 12:20:19 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:280:10)
+2026-06-25 12:20:19 +05:30:     at router.handle (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:175:3)
+2026-06-25 12:20:19 +05:30:     at router (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:47:12)
+2026-06-25 12:20:19 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:20:33 +05:30: Error: column index out of range
+2026-06-25 12:20:33 +05:30:     at stmt.get (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/database/schema.js:27:14)
+2026-06-25 12:20:33 +05:30:     at Object.arborist (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/routes/dashboard.js:41:105)
+2026-06-25 12:20:33 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/routes/dashboard.js:112:25
+2026-06-25 12:20:33 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:20:33 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/route.js:149:13)
+2026-06-25 12:20:33 +05:30:     at requireAuth (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/middleware/auth.js:8:3)
+2026-06-25 12:20:33 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:20:33 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/route.js:149:13)
+2026-06-25 12:20:33 +05:30:     at Route.dispatch (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/route.js:119:3)
+2026-06-25 12:20:33 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:20:33 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:284:15
+2026-06-25 12:20:33 +05:30:     at router.process_params (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:346:12)
+2026-06-25 12:20:33 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:280:10)
+2026-06-25 12:20:33 +05:30:     at router.handle (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:175:3)
+2026-06-25 12:20:33 +05:30:     at router (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:47:12)
+2026-06-25 12:20:33 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:21:46 +05:30: TypeError: cb is not a function
+2026-06-25 12:21:46 +05:30:     at SQLiteSessionStore.destroy (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/middleware/sessionStore.js:38:19)
+2026-06-25 12:21:46 +05:30:     at Session.destroy (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express-session/session/session.js:111:25)
+2026-06-25 12:21:46 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/routes/auth.js:69:15
+2026-06-25 12:21:46 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:21:46 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/route.js:149:13)
+2026-06-25 12:21:46 +05:30:     at Route.dispatch (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/route.js:119:3)
+2026-06-25 12:21:46 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:21:46 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:284:15
+2026-06-25 12:21:46 +05:30:     at router.process_params (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:346:12)
+2026-06-25 12:21:46 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:280:10)
+2026-06-25 12:21:46 +05:30:     at router.handle (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:175:3)
+2026-06-25 12:21:46 +05:30:     at router (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:47:12)
+2026-06-25 12:21:46 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:21:46 +05:30:     at trim_prefix (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:328:13)
+2026-06-25 12:21:46 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:286:9
+2026-06-25 12:21:46 +05:30:     at router.process_params (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:346:12)
+2026-06-25 12:21:46 +05:30: TypeError: Cannot read properties of undefined (reading 'user')
+2026-06-25 12:21:46 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/server.js:89:65
+2026-06-25 12:21:46 +05:30:     at Layer.handle_error (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:71:5)
+2026-06-25 12:21:46 +05:30:     at trim_prefix (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:326:13)
+2026-06-25 12:21:46 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:286:9
+2026-06-25 12:21:46 +05:30:     at router.process_params (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:346:12)
+2026-06-25 12:21:46 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:280:10)
+2026-06-25 12:21:46 +05:30:     at Layer.handle_error (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:67:12)
+2026-06-25 12:21:46 +05:30:     at trim_prefix (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:326:13)
+2026-06-25 12:21:46 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:286:9
+2026-06-25 12:21:46 +05:30:     at router.process_params (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:346:12)
+2026-06-25 12:21:46 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:280:10)
+2026-06-25 12:21:46 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:646:15
+2026-06-25 12:21:46 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:265:14)
+2026-06-25 12:21:46 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/route.js:141:14)
+2026-06-25 12:21:46 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:97:5)
+2026-06-25 12:21:46 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/route.js:149:13)
+2026-06-25 12:22:05 +05:30: TypeError: cb is not a function
+2026-06-25 12:22:05 +05:30:     at SQLiteSessionStore.destroy (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/middleware/sessionStore.js:38:19)
+2026-06-25 12:22:05 +05:30:     at Session.destroy (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express-session/session/session.js:111:25)
+2026-06-25 12:22:05 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/routes/auth.js:69:15
+2026-06-25 12:22:05 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:22:05 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/route.js:149:13)
+2026-06-25 12:22:05 +05:30:     at Route.dispatch (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/route.js:119:3)
+2026-06-25 12:22:05 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:22:05 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:284:15
+2026-06-25 12:22:05 +05:30:     at router.process_params (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:346:12)
+2026-06-25 12:22:05 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:280:10)
+2026-06-25 12:22:05 +05:30:     at router.handle (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:175:3)
+2026-06-25 12:22:05 +05:30:     at router (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:47:12)
+2026-06-25 12:22:05 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:22:05 +05:30:     at trim_prefix (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:328:13)
+2026-06-25 12:22:05 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:286:9
+2026-06-25 12:22:05 +05:30:     at router.process_params (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:346:12)
+2026-06-25 12:22:05 +05:30: TypeError: Cannot read properties of undefined (reading 'user')
+2026-06-25 12:22:05 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/server.js:89:65
+2026-06-25 12:22:05 +05:30:     at Layer.handle_error (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:71:5)
+2026-06-25 12:22:05 +05:30:     at trim_prefix (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:326:13)
+2026-06-25 12:22:05 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:286:9
+2026-06-25 12:22:05 +05:30:     at router.process_params (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:346:12)
+2026-06-25 12:22:05 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:280:10)
+2026-06-25 12:22:05 +05:30:     at Layer.handle_error (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:67:12)
+2026-06-25 12:22:05 +05:30:     at trim_prefix (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:326:13)
+2026-06-25 12:22:05 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:286:9
+2026-06-25 12:22:05 +05:30:     at router.process_params (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:346:12)
+2026-06-25 12:22:05 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:280:10)
+2026-06-25 12:22:05 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:646:15
+2026-06-25 12:22:05 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:265:14)
+2026-06-25 12:22:05 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/route.js:141:14)
+2026-06-25 12:22:05 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:97:5)
+2026-06-25 12:22:05 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/route.js:149:13)
+2026-06-25 12:59:09 +05:30: TypeError: Provided value cannot be bound to SQLite parameter 1.
+2026-06-25 12:59:09 +05:30:     at stmt.get (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/database/schema.js:27:14)
+2026-06-25 12:59:09 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/routes/auth.js:17:87
+2026-06-25 12:59:09 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:59:09 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/route.js:149:13)
+2026-06-25 12:59:09 +05:30:     at Route.dispatch (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/route.js:119:3)
+2026-06-25 12:59:09 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:59:09 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:284:15
+2026-06-25 12:59:09 +05:30:     at router.process_params (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:346:12)
+2026-06-25 12:59:09 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:280:10)
+2026-06-25 12:59:09 +05:30:     at router.handle (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:175:3)
+2026-06-25 12:59:09 +05:30:     at router (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:47:12)
+2026-06-25 12:59:09 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:59:09 +05:30:     at trim_prefix (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:328:13)
+2026-06-25 12:59:09 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:286:9
+2026-06-25 12:59:09 +05:30:     at router.process_params (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:346:12)
+2026-06-25 12:59:09 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:280:10)
+2026-06-25 12:59:13 +05:30: TypeError: Provided value cannot be bound to SQLite parameter 1.
+2026-06-25 12:59:13 +05:30:     at stmt.get (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/database/schema.js:27:14)
+2026-06-25 12:59:13 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/routes/auth.js:17:87
+2026-06-25 12:59:13 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:59:13 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/route.js:149:13)
+2026-06-25 12:59:13 +05:30:     at Route.dispatch (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/route.js:119:3)
+2026-06-25 12:59:13 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:59:13 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:284:15
+2026-06-25 12:59:13 +05:30:     at router.process_params (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:346:12)
+2026-06-25 12:59:13 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:280:10)
+2026-06-25 12:59:13 +05:30:     at router.handle (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:175:3)
+2026-06-25 12:59:13 +05:30:     at router (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:47:12)
+2026-06-25 12:59:13 +05:30:     at Layer.handle [as handle_request] (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/layer.js:95:5)
+2026-06-25 12:59:13 +05:30:     at trim_prefix (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:328:13)
+2026-06-25 12:59:13 +05:30:     at /Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:286:9
+2026-06-25 12:59:13 +05:30:     at router.process_params (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:346:12)
+2026-06-25 12:59:13 +05:30:     at next (/Users/kishandbelavadi/Downloads/Work/Programming/Open-Apps/pdm/node_modules/express/lib/router/index.js:280:10)

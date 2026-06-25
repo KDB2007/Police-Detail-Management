@@ -1,0 +1,77 @@
+<h2 class="text-xl font-bold text-surface-800 dark:text-white mb-1">User Management</h2>
+<p class="text-sm text-surface-500 dark:text-surface-400 mb-6">Manage system users, roles, and organizations</p>
+
+<div class="mb-6">
+  <button onclick="document.getElementById('createUserModal').classList.remove('hidden')" class="bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors inline-flex items-center gap-2"><i class="fas fa-plus"></i>Add User</button>
+</div>
+
+<div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead><tr class="bg-surface-50 dark:bg-surface-800/50 text-left text-xs text-surface-500 uppercase tracking-wider"><th class="px-5 py-3 font-medium">Name</th><th class="px-5 py-3 font-medium">Username</th><th class="px-5 py-3 font-medium">Email</th><th class="px-5 py-3 font-medium">Role</th><th class="px-5 py-3 font-medium">Organization</th><th class="px-5 py-3 font-medium">Status</th><th class="px-5 py-3 font-medium">Actions</th></tr></thead>
+      <tbody class="divide-y divide-surface-100 dark:divide-surface-700">
+        <% users.forEach(u => { %>
+          <tr class="hover:bg-surface-50 dark:hover:bg-surface-700/30 transition-colors">
+            <td class="px-5 py-3.5 font-medium text-surface-800 dark:text-surface-200"><%= u.full_name %></td>
+            <td class="px-5 py-3.5 text-surface-600"><%= u.username %></td>
+            <td class="px-5 py-3.5 text-surface-600 text-xs"><%= u.email %></td>
+            <td class="px-5 py-3.5"><span class="badge-<%= u.role %>"><%= u.role.replace('_', ' ') %></span></td>
+            <td class="px-5 py-3.5 text-surface-600"><%= u.org_name || 'N/A' %></td>
+            <td class="px-5 py-3.5"><%= u.is_active ? '<span class="text-green-600 text-xs"><i class="fas fa-circle text-[6px] mr-1"></i>Active</span>' : '<span class="text-red-500 text-xs"><i class="fas fa-circle text-[6px] mr-1"></i>Inactive</span>' %></td>
+            <td class="px-5 py-3.5"><button onclick="editUser(<%= u.id %>,'<%= u.full_name %>','<%= u.email %>','<%= u.phone || '' %>','<%= u.role %>',<%= u.organization_id || 'null' %>,<%= u.is_active %>)" class="text-primary-600 hover:text-primary-800 dark:text-primary-400 text-xs font-medium"><i class="fas fa-pen mr-1"></i>Edit</button></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Create User Modal -->
+<div id="createUserModal" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center hidden" onclick="if(event.target===this)this.classList.add('hidden')">
+  <div class="bg-white dark:bg-surface-800 rounded-2xl shadow-2xl w-full max-w-lg mx-4 p-6">
+    <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold text-surface-800 dark:text-white">Create User</h3><button onclick="document.getElementById('createUserModal').classList.add('hidden')" class="text-surface-400 hover:text-surface-600"><i class="fas fa-times"></i></button></div>
+    <form method="POST" action="/admin/users/create" class="space-y-4">
+      <div class="grid grid-cols-2 gap-3">
+        <div class="col-span-2"><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1">Full Name</label><input type="text" name="full_name" required class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+        <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1">Username</label><input type="text" name="username" required class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+        <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1">Email</label><input type="email" name="email" required class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+        <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1">Password</label><input type="password" name="password" class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" placeholder="default: password123"></div>
+        <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1">Phone</label><input type="text" name="phone" class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+        <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1">Role</label><select name="role" required class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"><% roles.forEach(r => { %><option value="<%= r.name %>"><%= r.name.replace('_',' ').replace(/\b\w/g,l=>l.toUpperCase()) %></option><% }) %></select></div>
+        <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1">Organization</label><select name="organization_id" class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"><option value="">None</option><% orgs.forEach(o => { %><option value="<%= o.id %>"><%= o.name %></option><% }) %></select></div>
+      </div>
+      <div class="flex gap-3 pt-2"><button type="submit" class="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-medium px-4 py-2.5 rounded-lg text-sm">Create User</button><button type="button" onclick="document.getElementById('createUserModal').classList.add('hidden')" class="px-4 py-2.5 text-sm text-surface-600 hover:text-surface-800">Cancel</button></div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit User Modal -->
+<div id="editUserModal" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center hidden" onclick="if(event.target===this)this.classList.add('hidden')">
+  <div class="bg-white dark:bg-surface-800 rounded-2xl shadow-2xl w-full max-w-lg mx-4 p-6">
+    <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold text-surface-800 dark:text-white">Edit User</h3><button onclick="document.getElementById('editUserModal').classList.add('hidden')" class="text-surface-400 hover:text-surface-600"><i class="fas fa-times"></i></button></div>
+    <form method="POST" id="editUserForm" class="space-y-4">
+      <div class="grid grid-cols-2 gap-3">
+        <div class="col-span-2"><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1">Full Name</label><input type="text" name="full_name" id="edit_full_name" required class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+        <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1">Email</label><input type="email" name="email" id="edit_email" required class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+        <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1">Phone</label><input type="text" name="phone" id="edit_phone" class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+        <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1">Role</label><select name="role" id="edit_role" required class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"><% roles.forEach(r => { %><option value="<%= r.name %>"><%= r.name.replace('_',' ').replace(/\b\w/g,l=>l.toUpperCase()) %></option><% }) %></select></div>
+        <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1">Organization</label><select name="organization_id" id="edit_org" class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"><option value="">None</option><% orgs.forEach(o => { %><option value="<%= o.id %>"><%= o.name %></option><% }) %></select></div>
+        <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1">Active</label><select name="is_active" id="edit_active" class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"><option value="1">Active</option><option value="0">Inactive</option></select></div>
+      </div>
+      <div class="flex gap-3 pt-2"><button type="submit" class="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-medium px-4 py-2.5 rounded-lg text-sm">Update User</button><button type="button" onclick="document.getElementById('editUserModal').classList.add('hidden')" class="px-4 py-2.5 text-sm text-surface-600 hover:text-surface-800">Cancel</button></div>
+    </form>
+  </div>
+</div>
+
+<script>
+function editUser(id, name, email, phone, role, orgId, active) {
+  document.getElementById('edit_full_name').value = name;
+  document.getElementById('edit_email').value = email;
+  document.getElementById('edit_phone').value = phone;
+  document.getElementById('edit_role').value = role;
+  document.getElementById('edit_org').value = orgId || '';
+  document.getElementById('edit_active').value = active;
+  document.getElementById('editUserForm').action = '/admin/users/edit/' + id;
+  document.getElementById('editUserModal').classList.remove('hidden');
+}
+</script>

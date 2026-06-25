@@ -1,0 +1,49 @@
+<div class="min-h-screen flex flex-col bg-gradient-to-br from-primary-900 via-primary-800 to-surface-900">
+  <div class="flex-1 flex flex-col items-center justify-center px-4 py-12">
+    <div class="text-center mb-10">
+      <div class="inline-flex items-center justify-center w-20 h-20 bg-white/10 backdrop-blur rounded-2xl mb-6 shadow-2xl">
+        <i class="fas fa-shield-halved text-white text-4xl"></i>
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-bold text-white mb-3 tracking-tight">Police Detail Management</h1>
+      <p class="text-primary-200 text-lg sm:text-xl max-w-xl mx-auto">Enterprise workflow platform for managing police detail operations, invoicing, and reconciliation.</p>
+    </div>
+
+    <div class="w-full max-w-4xl">
+      <p class="text-center text-primary-200 text-sm font-medium mb-6 uppercase tracking-wider">Select Your Role to Continue</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <% const roles = [
+          { id: 'foreman', title: 'General Foreman', desc: 'Create and manage police detail slips', icon: 'fa-helmet-safety', color: 'from-blue-500 to-blue-600', users: ['john.foreman','jane.foreman'] },
+          { id: 'arborist', title: 'NG Arborist', desc: 'Review and verify police detail slips', icon: 'fa-tree', color: 'from-emerald-500 to-emerald-600', users: ['mike.arborist','sarah.arborist'] },
+          { id: 'billing', title: 'Vendor Billing', desc: 'Generate invoices and track payments', icon: 'fa-file-invoice-dollar', color: 'from-violet-500 to-violet-600', users: ['bob.billing','lisa.billing'] },
+          { id: 'detail_admin', title: 'NG Detail Admin', desc: 'Reconcile invoices and process payments', icon: 'fa-scale-balanced', color: 'from-amber-500 to-amber-600', users: ['dave.admin','emma.admin'] },
+          { id: 'super_admin', title: 'Super Admin', desc: 'Full system administration', icon: 'fa-crown', color: 'from-rose-500 to-rose-600', users: ['admin'] }
+        ] %>
+        <% roles.forEach(role => { %>
+          <a href="/login?role=<%= role.id %>" class="group relative bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5">
+            <div class="flex items-center gap-4 mb-3">
+              <div class="w-12 h-12 bg-gradient-to-br <%= role.color %> rounded-xl flex items-center justify-center shadow-lg">
+                <i class="fas <%= role.icon %> text-white text-lg"></i>
+              </div>
+              <div>
+                <h3 class="text-white font-semibold text-lg"><%= role.title %></h3>
+                <p class="text-primary-200 text-xs"><%= role.desc %></p>
+              </div>
+            </div>
+            <div class="flex flex-wrap gap-1.5 mt-3">
+              <% role.users.forEach(u => { %>
+                <span class="text-xs bg-white/10 text-primary-200 px-2 py-0.5 rounded-full"><%= u %></span>
+              <% }) %>
+            </div>
+            <div class="mt-3 text-xs text-primary-300 group-hover:text-white transition-colors">
+              Click to login as <span class="font-medium"><%= role.title %></span> <i class="fas fa-arrow-right ml-1 text-xs"></i>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+
+    <div class="mt-12 text-center">
+      <p class="text-primary-300 text-xs">&copy; 2024 Police Detail Management Platform. All rights reserved.</p>
+    </div>
+  </div>
+</div>

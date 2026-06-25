@@ -1,0 +1,94 @@
+<h2 class="text-xl font-bold text-surface-800 dark:text-white mb-1">Detail Admin Dashboard</h2>
+<p class="text-sm text-surface-500 dark:text-surface-400 mb-6">Reconcile invoices, process payments, and manage archives.</p>
+
+<div class="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-6">
+  <% const cards = [
+    { label: 'Pending Recon', value: stats.pending, icon: 'fa-clock', color: 'text-yellow-600', bg: 'bg-yellow-50 dark:bg-yellow-900/20' },
+    { label: 'Reconciled', value: stats.reconciled, icon: 'fa-check-double', color: 'text-blue-600', bg: 'bg-blue-50 dark:bg-blue-900/20' },
+    { label: 'Paid', value: stats.paid, icon: 'fa-sack-dollar', color: 'text-green-600', bg: 'bg-green-50 dark:bg-green-900/20' },
+    { label: 'Archived', value: stats.archived, icon: 'fa-box-archive', color: 'text-gray-600', bg: 'bg-gray-50 dark:bg-gray-900/20' },
+    { label: 'Total Amount', value: '$' + Number(stats.totalAmount).toLocaleString('en-US', {minimumFractionDigits: 0}), icon: 'fa-coins', color: 'text-emerald-600', bg: 'bg-emerald-50 dark:bg-emerald-900/20' }
+  ] %>
+  <% cards.forEach(card => { %>
+    <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-4">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-2xl font-bold text-surface-800 dark:text-white"><%= card.value %></span>
+        <div class="w-9 h-9 rounded-lg <%= card.bg %> flex items-center justify-center"><i class="fas <%= card.icon %> <%= card.color %>"></i></div>
+      </div>
+      <p class="text-xs text-surface-500 dark:text-surface-400 font-medium"><%= card.label %></p>
+    </div>
+  <% }) %>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <div class="lg:col-span-2">
+    <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700">
+      <div class="px-5 py-4 border-b border-surface-200 dark:border-surface-700 flex items-center justify-between">
+        <h3 class="font-semibold text-surface-800 dark:text-white text-sm">Pending Reconciliation (<%= pendingCount %>)</h3>
+        <a href="/invoices?status=submitted" class="text-xs text-primary-600 dark:text-primary-400 hover:underline">View All</a>
+      </div>
+      <div class="p-5">
+        <% if (pendingRecon.length === 0) { %>
+          <div class="text-center py-8 text-surface-400 dark:text-surface-500">
+            <i class="fas fa-check-circle text-3xl mb-2 text-green-400"></i>
+            <p class="text-sm">No pending invoices to reconcile.</p>
+          </div>
+        <% } else { %>
+          <div class="space-y-3">
+            <% pendingRecon.forEach(inv => { %>
+              <div class="border border-surface-200 dark:border-surface-700 rounded-lg p-4 hover:bg-surface-50 dark:hover:bg-surface-700/50 transition-colors cursor-pointer" onclick="window.location='/invoices/view/<%= inv.id %>'">
+                <div class="flex items-start justify-between mb-2">
+                  <div>
+                    <span class="font-medium text-surface-800 dark:text-white text-sm"><%= inv.invoice_number %></span>
+                    <span class="text-xs text-surface-400 ml-2"><%= inv.org_name %></span>
+                  </div>
+                  <span class="badge-<%= inv.status %>"><%= inv.status.replace('_', ' ') %></span>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-surface-500">
+                  <div><span class="text-surface-400">Slip:</span> <%= inv.slip_number %></div>
+                  <div><span class="text-surface-400">Project:</span> <%= inv.project_number %></div>
+                  <div><span class="text-surface-400">Amount:</span> $<%= Number(inv.grand_total).toFixed(2) %></div>
+                  <div><span class="text-surface-400">Billing:</span> <%= inv.billing_name %></div>
+                </div>
+                <div class="mt-2 flex gap-2">
+                  <a href="/invoices/view/<%= inv.id %>" class="text-xs bg-primary-600 hover:bg-primary-700 text-white px-3 py-1.5 rounded-lg transition-colors"><i class="fas fa-scale-balanced mr-1"></i>Reconcile</a>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700">
+      <div class="px-5 py-4 border-b border-surface-200 dark:border-surface-700">
+        <h3 class="font-semibold text-surface-800 dark:text-white text-sm">Recent Invoices</h3>
+      </div>
+      <div class="p-5 space-y-3 max-h-96 overflow-y-auto">
+        <% recentInvoices.forEach(inv => { %>
+          <a href="/invoices/view/<%= inv.id %>" class="flex items-center justify-between p-2 hover:bg-surface-50 dark:hover:bg-surface-700/50 rounded-lg transition-colors">
+            <div>
+              <p class="text-sm font-medium text-surface-700 dark:text-surface-300"><%= inv.invoice_number %></p>
+              <p class="text-xs text-surface-400"><%= inv.slip_number %> • $<%= Number(inv.grand_total).toFixed(2) %></p>
+            </div>
+            <span class="badge-<%= inv.status %> text-xs"><%= inv.status.replace('_', ' ') %></span>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+    <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 mt-4">
+      <div class="px-5 py-4 border-b border-surface-200 dark:border-surface-700">
+        <h3 class="font-semibold text-surface-800 dark:text-white text-sm">Quick Actions</h3>
+      </div>
+      <div class="p-5 space-y-2">
+        <a href="/admin/audit" class="flex items-center gap-3 px-3 py-2.5 bg-surface-50 dark:bg-surface-700 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-600 transition-colors text-sm text-surface-700 dark:text-surface-300">
+          <i class="fas fa-history text-surface-400"></i> View Audit Log
+        </a>
+        <a href="/reports" class="flex items-center gap-3 px-3 py-2.5 bg-surface-50 dark:bg-surface-700 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-600 transition-colors text-sm text-surface-700 dark:text-surface-300">
+          <i class="fas fa-chart-bar text-surface-400"></i> Generate Reports
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,61 @@
+<h2 class="text-xl font-bold text-surface-800 dark:text-white mb-1">Reports & Exports</h2>
+<p class="text-sm text-surface-500 dark:text-surface-400 mb-6">Generate and export reports for slips and invoices</p>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <!-- Slips Report -->
+  <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-6">
+    <h3 class="font-semibold text-surface-800 dark:text-white text-lg mb-4"><i class="fas fa-file-lines text-primary-500 mr-2"></i>Police Detail Slips Report</h3>
+    <form class="space-y-4" id="slipsReportForm">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div><label class="block text-xs font-medium text-surface-500 mb-1">Status</label><select name="status" class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"><option value="">All Statuses</option><% ['draft','submitted','approved','rejected','non_billable','changes_requested','invoiced','paid','archived'].forEach(s => { %><option value="<%= s %>"><%= s.replace('_',' ').replace(/\b\w/g,l=>l.toUpperCase()) %></option><% }) %></select></div>
+        <div><label class="block text-xs font-medium text-surface-500 mb-1">Project</label><select name="project_id" class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"><option value="">All Projects</option><% projects.forEach(p => { %><option value="<%= p.id %>"><%= p.project_number %> — <%= p.name %></option><% }) %></select></div>
+        <div><label class="block text-xs font-medium text-surface-500 mb-1">Foreman</label><select name="foreman_id" class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"><option value="">All Foremen</option><% foremen.forEach(f => { %><option value="<%= f.id %>"><%= f.full_name %></option><% }) %></select></div>
+        <div><label class="block text-xs font-medium text-surface-500 mb-1">Date To</label><input type="date" name="date_to" class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+        <div><label class="block text-xs font-medium text-surface-500 mb-1">Date From</label><input type="date" name="date_from" class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+      </div>
+      <div class="flex gap-2">
+        <a id="exportPDF" href="#" class="flex-1 bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors text-center"><i class="fas fa-file-pdf mr-1"></i>Export PDF</a>
+        <a id="exportExcel" href="#" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors text-center"><i class="fas fa-file-excel mr-1"></i>Export Excel</a>
+        <a id="exportCSV" href="#" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors text-center"><i class="fas fa-file-csv mr-1"></i>Export CSV</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Invoices Report -->
+  <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-6">
+    <h3 class="font-semibold text-surface-800 dark:text-white text-lg mb-4"><i class="fas fa-file-invoice-dollar text-primary-500 mr-2"></i>Invoices Report</h3>
+    <form class="space-y-4" id="invoicesReportForm">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div><label class="block text-xs font-medium text-surface-500 mb-1">Status</label><select name="status" class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"><option value="">All Statuses</option><% ['draft','submitted','under_review','reconciled','disputed','paid','archived'].forEach(s => { %><option value="<%= s %>"><%= s.replace('_',' ').replace(/\b\w/g,l=>l.toUpperCase()) %></option><% }) %></select></div>
+        <div><label class="block text-xs font-medium text-surface-500 mb-1">Date From</label><input type="date" name="date_from" class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+        <div><label class="block text-xs font-medium text-surface-500 mb-1">Date To</label><input type="date" name="date_to" class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+      </div>
+      <div>
+        <a id="exportInvoicesExcel" href="#" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors inline-block text-center"><i class="fas fa-file-excel mr-1"></i>Export Invoices to Excel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+document.getElementById('exportPDF')?.addEventListener('click', function(e) {
+  e.preventDefault(); const f = document.getElementById('slipsReportForm');
+  const params = new URLSearchParams(new FormData(f)).toString();
+  this.href = '/reports/slips/pdf?' + params; window.open(this.href, '_blank');
+});
+document.getElementById('exportExcel')?.addEventListener('click', function(e) {
+  e.preventDefault(); const f = document.getElementById('slipsReportForm');
+  const params = new URLSearchParams(new FormData(f)).toString();
+  this.href = '/reports/slips/excel?' + params; window.location.href = this.href;
+});
+document.getElementById('exportCSV')?.addEventListener('click', function(e) {
+  e.preventDefault(); const f = document.getElementById('slipsReportForm');
+  const params = new URLSearchParams(new FormData(f)).toString();
+  this.href = '/reports/slips/csv?' + params; window.location.href = this.href;
+});
+document.getElementById('exportInvoicesExcel')?.addEventListener('click', function(e) {
+  e.preventDefault(); const f = document.getElementById('invoicesReportForm');
+  const params = new URLSearchParams(new FormData(f)).toString();
+  this.href = '/reports/invoices/excel?' + params; window.location.href = this.href;
+});
+</script>

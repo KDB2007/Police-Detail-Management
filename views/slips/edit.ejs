@@ -1,0 +1,37 @@
+<div class="mb-6">
+  <a href="/slips/view/<%= slip.id %>" class="text-sm text-primary-600 dark:text-primary-400 hover:underline mb-2 inline-block"><i class="fas fa-arrow-left mr-1"></i>Back to Slip</a>
+  <h2 class="text-xl font-bold text-surface-800 dark:text-white">Edit Slip <%= slip.slip_number %></h2>
+</div>
+<div class="max-w-3xl">
+  <form method="POST" action="/slips/edit/<%= slip.id %>" class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-6 space-y-6">
+    <% if (errors && errors.length > 0) { %>
+      <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg px-4 py-3">
+        <% errors.forEach(e => { %><p class="text-sm text-red-600 dark:text-red-400"><%= e %></p><% }) %>
+      </div>
+    <% } %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="sm:col-span-2">
+        <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Project</label>
+        <select name="project_id" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none">
+          <% projects.forEach(p => { %>
+            <option value="<%= p.id %>" <%= slip.project_id == p.id ? 'selected' : '' %>><%= p.project_number %> — <%= p.name %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Officer Name</label><input type="text" name="officer_name" value="<%= slip.officer_name %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+      <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Badge</label><input type="text" name="officer_badge" value="<%= slip.officer_badge || '' %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+      <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Department</label><input type="text" name="officer_department" value="<%= slip.officer_department || '' %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+      <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Shift Start</label><input type="datetime-local" name="shift_start" value="<%= slip.shift_start %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+      <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Shift End</label><input type="datetime-local" name="shift_end" value="<%= slip.shift_end %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+      <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Total Hours</label><input type="number" step="0.5" name="total_hours" value="<%= slip.total_hours %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+      <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Rate per Hour</label><input type="number" step="0.01" name="rate_per_hour" value="<%= slip.rate_per_hour %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+      <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Location</label><input type="text" name="location_details" value="<%= slip.location_details || '' %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+      <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Crew Info</label><input type="text" name="crew_info" value="<%= slip.crew_info || '' %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
+      <div class="sm:col-span-2"><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Notes</label><textarea name="notes" rows="3" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"><%= slip.notes || '' %></textarea></div>
+    </div>
+    <div class="flex items-center gap-3">
+      <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white font-medium px-6 py-2.5 rounded-lg transition-colors text-sm"><i class="fas fa-save mr-1"></i>Update Slip</button>
+      <a href="/slips/view/<%= slip.id %>" class="text-surface-600 dark:text-surface-400 hover:text-surface-800 px-4 py-2.5 text-sm">Cancel</a>
+    </div>
+  </form>
+</div>
