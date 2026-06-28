@@ -12,6 +12,14 @@ const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'http://localhost:4000')
 
 initDb();
 
+// Auto-seed on first run (empty database)
+const { getDb } = require('./database/schema');
+const userCount = getDb().prepare('SELECT COUNT(*) as c FROM users').get().c;
+if (userCount === 0) {
+  console.log('Empty database detected — running seed...');
+  require('./database/seed');
+}
+
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1d' }));
