@@ -10,7 +10,7 @@
 
 <!-- Filters -->
 <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-4 mb-6">
-  <form method="GET" action="/slips" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+  <form method="GET" action="/slips" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
     <div>
       <label class="block text-xs font-medium text-surface-500 dark:text-surface-400 mb-1">Search</label>
       <div class="relative">
@@ -42,11 +42,11 @@
     </div>
     <div>
       <label class="block text-xs font-medium text-surface-500 dark:text-surface-400 mb-1">To Date</label>
-      <div class="flex gap-2">
-        <input type="date" name="date_to" value="<%= query.date_to || '' %>" class="flex-1 px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none">
-        <button type="submit" class="px-3 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm transition-colors"><i class="fas fa-filter"></i></button>
-        <a href="/slips" class="px-3 py-2 bg-surface-200 dark:bg-surface-600 hover:bg-surface-300 dark:hover:bg-surface-500 text-surface-600 dark:text-surface-300 rounded-lg text-sm transition-colors"><i class="fas fa-times"></i></a>
-      </div>
+      <input type="date" name="date_to" value="<%= query.date_to || '' %>" class="w-full px-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none">
+    </div>
+    <div class="flex items-end gap-2">
+      <button type="submit" class="flex-1 px-3 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm transition-colors"><i class="fas fa-filter mr-1"></i>Filter</button>
+      <a href="/slips" class="px-3 py-2 bg-surface-200 dark:bg-surface-600 hover:bg-surface-300 dark:hover:bg-surface-500 text-surface-600 dark:text-surface-300 rounded-lg text-sm transition-colors"><i class="fas fa-times"></i></a>
     </div>
   </form>
 </div>
