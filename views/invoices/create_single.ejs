@@ -1,0 +1,67 @@
+<div class="mb-6">
+  <a href="/slips/view/<%= slip.id %>" class="text-sm text-primary-600 dark:text-primary-400 hover:underline mb-2 inline-block"><i class="fas fa-arrow-left mr-1"></i>Back to Slip</a>
+  <h2 class="text-xl font-bold text-surface-800 dark:text-white">Create Invoice</h2>
+  <p class="text-sm text-surface-500 dark:text-surface-400 mt-0.5">Generate an invoice from slip <strong><%= slip.slip_number %></strong></p>
+</div>
+
+<form method="POST" action="/invoices/create/<%= slip.id %>">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2">
+      <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-6">
+        <h3 class="font-semibold text-surface-800 dark:text-white text-sm mb-4">Slip Details</h3>
+        <div class="grid grid-cols-2 gap-4 text-sm mb-4">
+          <div><span class="text-surface-400">Slip Number</span><p class="font-medium text-surface-800 dark:text-surface-200"><%= slip.slip_number %></p></div>
+          <div><span class="text-surface-400">Officer</span><p class="font-medium text-surface-800 dark:text-surface-200"><%= slip.officer_name %></p></div>
+          <div><span class="text-surface-400">Project</span><p class="font-medium text-surface-800 dark:text-surface-200"><%= slip.project_number %></p></div>
+          <div><span class="text-surface-400">Foreman</span><p class="font-medium text-surface-800 dark:text-surface-200"><%= slip.foreman_name %></p></div>
+          <div><span class="text-surface-400">Organization</span><p class="font-medium text-surface-800 dark:text-surface-200"><%= slip.org_name %></p></div>
+          <div><span class="text-surface-400">Work Order</span><p class="font-medium text-surface-800 dark:text-surface-200"><%= slip.work_order_number || 'N/A' %></p></div>
+        </div>
+
+        <h3 class="font-semibold text-surface-800 dark:text-white text-sm mb-3">Line Items</h3>
+        <table class="w-full text-sm">
+          <thead><tr class="text-left text-xs text-surface-500 uppercase tracking-wider"><th class="pb-2 font-medium">Description</th><th class="pb-2 font-medium text-right">Hours</th><th class="pb-2 font-medium text-right">Rate</th><th class="pb-2 font-medium text-right">Amount</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="py-2 text-surface-700 dark:text-surface-300">Police Detail - <%= slip.officer_name %> (<%= slip.slip_number %>)</td>
+              <td class="py-2 text-right"><input type="number" step="0.25" name="hours" value="<%= slip.total_hours %>" class="w-20 px-2 py-1 border border-surface-300 dark:border-surface-600 rounded bg-white dark:bg-surface-700 text-sm text-right focus:ring-2 focus:ring-primary-500 outline-none"></td>
+              <td class="py-2 text-right"><input type="number" step="0.01" name="rate" value="<%= slip.rate_per_hour %>" class="w-24 px-2 py-1 border border-surface-300 dark:border-surface-600 rounded bg-white dark:bg-surface-700 text-sm text-right focus:ring-2 focus:ring-primary-500 outline-none"></td>
+              <td class="py-2 text-right font-medium text-surface-800 dark:text-surface-200">$<%= (slip.total_hours * slip.rate_per_hour).toFixed(2) %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-6 space-y-4">
+        <h3 class="font-semibold text-surface-800 dark:text-white text-sm">Invoice Settings</h3>
+        <div>
+          <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Tax Rate (%)</label>
+          <input type="number" step="0.01" name="tax_rate" value="6.25" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Payment Terms</label>
+          <select name="payment_terms" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none">
+            <option value="Net 30">Net 30</option>
+            <option value="Net 15">Net 15</option>
+            <option value="Net 45">Net 45</option>
+            <option value="Due on Receipt">Due on Receipt</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Notes</label>
+          <textarea name="notes" rows="3" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" placeholder="Invoice notes..."></textarea>
+        </div>
+        <div class="pt-2 border-t border-surface-200 dark:border-surface-700">
+          <div class="flex items-center justify-between text-sm mb-1">
+            <span class="text-surface-500">Est. Subtotal</span>
+            <span class="font-bold text-surface-800 dark:text-white">$<%= (slip.total_hours * slip.rate_per_hour).toFixed(2) %></span>
+          </div>
+        </div>
+        <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium px-6 py-2.5 rounded-lg transition-colors text-sm"><i class="fas fa-file-invoice-dollar mr-1"></i>Generate Draft Invoice</button>
+      </div>
+      <a href="/slips/view/<%= slip.id %>" class="block text-center mt-3 text-sm text-surface-500 hover:text-surface-700">Cancel</a>
+    </div>
+  </div>
+</form>

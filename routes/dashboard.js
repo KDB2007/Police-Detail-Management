@@ -55,8 +55,8 @@ router.get('/', requireAuth, (req, res) => {
         LEFT JOIN users u ON s.foreman_id = u.id
         LEFT JOIN organizations org ON u.organization_id = org.id
         WHERE s.status = 'approved' ORDER BY s.reviewed_at DESC`).all();
-      const myInvoices = db.prepare(`SELECT i.*, s.slip_number
-        FROM invoices i LEFT JOIN police_detail_slips s ON i.slip_id = s.id
+      const myInvoices = db.prepare(`SELECT i.*
+        FROM invoices i
         WHERE i.billing_team_id = ? ORDER BY i.created_at DESC LIMIT 10`).all(user.id);
       const stats = {
         draft: db.prepare("SELECT COUNT(*) as c FROM invoices WHERE billing_team_id = ? AND status = 'draft'").get(user.id).c,
@@ -69,15 +69,16 @@ router.get('/', requireAuth, (req, res) => {
       res.renderWithLayout('dashboard/billing', { user, stats, approvedSlips, myInvoices, approvedCount, unreadNotifCount });
     },
     detail_admin: () => {
-      const pendingRecon = db.prepare(`SELECT i.*, s.slip_number, p.project_number, u.full_name as billing_name, org.name as org_name
+      const pendingRecon = db.prepare(`SELECT i.*,
+        (SELECT GROUP_CONCAT(s.slip_number, ', ') FROM invoice_slips inv_s JOIN police_detail_slips s ON inv_s.slip_id = s.id WHERE inv_s.invoice_id = i.id) as slip_numbers,
+        u.full_name as billing_name, org.name as org_name
         FROM invoices i
-        LEFT JOIN police_detail_slips s ON i.slip_id = s.id
-        LEFT JOIN projects p ON s.project_id = p.id
         LEFT JOIN users u ON i.billing_team_id = u.id
         LEFT JOIN organizations org ON u.organization_id = org.id
         WHERE i.status IN ('submitted','under_review') ORDER BY i.created_at ASC`).all();
-      const recentInvoices = db.prepare(`SELECT i.*, s.slip_number
-        FROM invoices i LEFT JOIN police_detail_slips s ON i.slip_id = s.id
+      const recentInvoices = db.prepare(`SELECT i.*,
+        (SELECT GROUP_CONCAT(s.slip_number, ', ') FROM invoice_slips inv_s JOIN police_detail_slips s ON inv_s.slip_id = s.id WHERE inv_s.invoice_id = i.id) as slip_numbers
+        FROM invoices i
         ORDER BY i.created_at DESC LIMIT 10`).all();
       const stats = {
         pending: db.prepare("SELECT COUNT(*) as c FROM invoices WHERE status IN ('submitted','under_review')").get().c,

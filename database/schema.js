@@ -156,6 +156,12 @@ function initDb() {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
+    CREATE TABLE IF NOT EXISTS invoice_slips (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      invoice_id INTEGER NOT NULL REFERENCES invoices(id) ON DELETE CASCADE,
+      slip_id INTEGER NOT NULL REFERENCES police_detail_slips(id),
+      UNIQUE(invoice_id, slip_id)
+    );
     CREATE TABLE IF NOT EXISTS invoice_line_items (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       invoice_id INTEGER NOT NULL REFERENCES invoices(id) ON DELETE CASCADE,

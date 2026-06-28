@@ -1,3 +1,10 @@
+<style>
+.role-card[data-role="foreman"]:hover { background: linear-gradient(135deg, rgba(59,130,246,0.6), rgba(37,99,235,0.5)) !important; }
+.role-card[data-role="arborist"]:hover { background: linear-gradient(135deg, rgba(16,185,129,0.6), rgba(5,150,105,0.5)) !important; }
+.role-card[data-role="billing"]:hover { background: linear-gradient(135deg, rgba(139,92,246,0.6), rgba(124,58,237,0.5)) !important; }
+.role-card[data-role="detail_admin"]:hover { background: linear-gradient(135deg, rgba(245,158,11,0.6), rgba(217,119,6,0.5)) !important; }
+.role-card[data-role="super_admin"]:hover { background: linear-gradient(135deg, rgba(244,63,94,0.6), rgba(225,29,72,0.5)) !important; }
+</style>
 <div class="min-h-screen flex flex-col bg-gradient-to-br from-primary-900 via-primary-800 to-surface-900">
   <div class="flex-1 flex flex-col items-center justify-center px-4 py-12">
     <div class="text-center mb-10">
@@ -12,14 +19,14 @@
       <p class="text-center text-primary-200 text-sm font-medium mb-6 uppercase tracking-wider">Select Your Role to Continue</p>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <% const roles = [
-          { id: 'foreman', title: 'General Foreman', desc: 'Create and manage police detail slips', icon: 'fa-helmet-safety', color: 'from-blue-500 to-blue-600', users: ['john.foreman','jane.foreman'] },
-          { id: 'arborist', title: 'NG Arborist', desc: 'Review and verify police detail slips', icon: 'fa-tree', color: 'from-emerald-500 to-emerald-600', users: ['mike.arborist','sarah.arborist'] },
-          { id: 'billing', title: 'Vendor Billing', desc: 'Generate invoices and track payments', icon: 'fa-file-invoice-dollar', color: 'from-violet-500 to-violet-600', users: ['bob.billing','lisa.billing'] },
-          { id: 'detail_admin', title: 'NG Detail Admin', desc: 'Reconcile invoices and process payments', icon: 'fa-scale-balanced', color: 'from-amber-500 to-amber-600', users: ['dave.admin','emma.admin'] },
-          { id: 'super_admin', title: 'Super Admin', desc: 'Full system administration', icon: 'fa-crown', color: 'from-rose-500 to-rose-600', users: ['admin'] }
+          { id: 'foreman', title: 'General Foreman', desc: 'Create and manage police detail slips', icon: 'fa-helmet-safety', color: 'from-blue-500 to-blue-600', hex1: 'rgba(59,130,246,0.92)', hex2: 'rgba(37,99,235,0.88)', users: ['john.foreman','jane.foreman'] },
+          { id: 'arborist', title: 'NG Arborist', desc: 'Review and verify police detail slips', icon: 'fa-tree', color: 'from-emerald-500 to-emerald-600', hex1: 'rgba(16,185,129,0.92)', hex2: 'rgba(5,150,105,0.88)', users: ['mike.arborist','sarah.arborist'] },
+          { id: 'billing', title: 'Vendor Billing', desc: 'Generate invoices and track payments', icon: 'fa-file-invoice-dollar', color: 'from-violet-500 to-violet-600', hex1: 'rgba(139,92,246,0.92)', hex2: 'rgba(124,58,237,0.88)', users: ['bob.billing','lisa.billing'] },
+          { id: 'detail_admin', title: 'NG Detail Admin', desc: 'Reconcile invoices and process payments', icon: 'fa-scale-balanced', color: 'from-amber-500 to-amber-600', hex1: 'rgba(245,158,11,0.92)', hex2: 'rgba(217,119,6,0.88)', users: ['dave.admin','emma.admin'] },
+          { id: 'super_admin', title: 'Super Admin', desc: 'Full system administration', icon: 'fa-crown', color: 'from-rose-500 to-rose-600', hex1: 'rgba(244,63,94,0.92)', hex2: 'rgba(225,29,72,0.88)', users: ['admin'] }
         ] %>
         <% roles.forEach(role => { %>
-          <a href="/login?role=<%= role.id %>" class="group relative bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5">
+          <a href="/login?role=<%= role.id %>" class="role-card group relative bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-6 transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-2xl" data-role="<%= role.id %>">
             <div class="flex items-center gap-4 mb-3">
               <div class="w-12 h-12 bg-gradient-to-br <%= role.color %> rounded-xl flex items-center justify-center shadow-lg">
                 <i class="fas <%= role.icon %> text-white text-lg"></i>
@@ -43,7 +50,7 @@
     </div>
 
     <div class="mt-12 text-center">
-      <p class="text-primary-300 text-xs">&copy; 2024 Police Detail Management Platform. All rights reserved.</p>
+      <p class="text-primary-300 text-xs">&copy; 2026 Police Detail Management Platform. All rights reserved.</p>
     </div>
   </div>
 </div>

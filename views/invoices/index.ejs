@@ -3,6 +3,9 @@
     <h2 class="text-xl font-bold text-surface-800 dark:text-white">Invoices</h2>
     <p class="text-sm text-surface-500 dark:text-surface-400 mt-0.5">Manage invoices from approved police detail slips</p>
   </div>
+  <% if (user.role === 'billing') { %>
+    <a href="/invoices/create" class="mt-3 sm:mt-0 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors inline-flex items-center gap-2"><i class="fas fa-plus-circle"></i>Create Invoice</a>
+  <% } %>
 </div>
 
 <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-4 mb-6">
@@ -34,7 +37,7 @@
       <thead>
         <tr class="bg-surface-50 dark:bg-surface-800/50 text-left text-xs text-surface-500 uppercase tracking-wider">
           <th class="px-5 py-3 font-medium">Invoice #</th>
-          <th class="px-5 py-3 font-medium">Slip #</th>
+          <th class="px-5 py-3 font-medium">Slips</th>
           <th class="px-5 py-3 font-medium">Organization</th>
           <th class="px-5 py-3 font-medium">Subtotal</th>
           <th class="px-5 py-3 font-medium">Total</th>
@@ -50,7 +53,7 @@
           <% invoices.forEach(inv => { %>
             <tr class="hover:bg-surface-50 dark:hover:bg-surface-700/30 transition-colors">
               <td class="px-5 py-3.5 font-medium text-surface-800 dark:text-surface-200"><%= inv.invoice_number %></td>
-              <td class="px-5 py-3.5 text-surface-600"><%= inv.slip_number %></td>
+              <td class="px-5 py-3.5 text-surface-600 max-w-[200px] truncate" title="<%= inv.slip_numbers %>"><%= inv.slip_numbers || 'N/A' %></td>
               <td class="px-5 py-3.5 text-surface-600"><%= inv.org_name || 'N/A' %></td>
               <td class="px-5 py-3.5 text-surface-600">$<%= Number(inv.subtotal).toFixed(2) %></td>
               <td class="px-5 py-3.5 font-medium text-surface-800 dark:text-surface-200">$<%= Number(inv.grand_total).toFixed(2) %></td>

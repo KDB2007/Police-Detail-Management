@@ -1,0 +1,310 @@
+{
+  "communities": {
+    "0": [
+      "middleware_auth",
+      "middleware_auth_loaduserpermissions",
+      "middleware_auth_requireauth",
+      "middleware_auth_requirepermission",
+      "middleware_auth_requirerole",
+      "routes_api",
+      "routes_api_express",
+      "routes_api_getdb",
+      "routes_api_requireauth",
+      "routes_api_router",
+      "routes_dashboard",
+      "routes_dashboard_express",
+      "routes_dashboard_getdb",
+      "routes_dashboard_requireauth",
+      "routes_dashboard_router",
+      "routes_notifications",
+      "routes_notifications_express",
+      "routes_notifications_getdb",
+      "routes_notifications_requireauth",
+      "routes_notifications_router",
+      "server",
+      "server_allowed_origins",
+      "server_app",
+      "server_express",
+      "server_initdb",
+      "server_loaduserpermissions",
+      "server_path",
+      "server_requireauth",
+      "server_session",
+      "server_sqlitesessionstore"
+    ],
+    "1": [
+      "routes_slips",
+      "routes_slips_express",
+      "routes_slips_getdb",
+      "routes_slips_logaction",
+      "routes_slips_multer",
+      "routes_slips_notifyslipsubmitted_notifyslipapproved_notifysliprejected_notifyslipchangesrequested_notifyslipnonbillable",
+      "routes_slips_path",
+      "routes_slips_requireauth_requirerole",
+      "routes_slips_router",
+      "routes_slips_storage",
+      "routes_slips_upload",
+      "routes_slips_v4_uuidv4",
+      "services_notification",
+      "services_notification_createnotification",
+      "services_notification_getdb",
+      "services_notification_notifyinvoicecreated",
+      "services_notification_notifyinvoicepaid",
+      "services_notification_notifyinvoicereconciled",
+      "services_notification_notifyroleupdated",
+      "services_notification_notifyslipapproved",
+      "services_notification_notifyslipchangesrequested",
+      "services_notification_notifyslipnonbillable",
+      "services_notification_notifysliprejected",
+      "services_notification_notifyslipsubmitted",
+      "services_notification_notifyusercreated"
+    ],
+    "2": [
+      "database_schema_getdb",
+      "middleware_sessionstore",
+      "middleware_sessionstore_getdb",
+      "middleware_sessionstore_sqlitesessionstore",
+      "middleware_sessionstore_sqlitesessionstore_cleanup",
+      "middleware_sessionstore_sqlitesessionstore_constructor",
+      "middleware_sessionstore_sqlitesessionstore_destroy",
+      "middleware_sessionstore_sqlitesessionstore_get",
+      "middleware_sessionstore_sqlitesessionstore_set",
+      "middleware_sessionstore_sqlitesessionstore_touch",
+      "routes_reports",
+      "routes_reports_exportslipstopdf_exportslipstoexcel_exportslipstocsv_exportinvoicestoexcel",
+      "routes_reports_express",
+      "routes_reports_getdb",
+      "routes_reports_requireauth",
+      "routes_reports_router",
+      "services_reportexport",
+      "services_reportexport_exceljs",
+      "services_reportexport_exportinvoicestoexcel",
+      "services_reportexport_exportslipstocsv",
+      "services_reportexport_exportslipstoexcel",
+      "services_reportexport_exportslipstopdf",
+      "services_reportexport_getdb",
+      "services_reportexport_pdfdocument"
+    ],
+    "3": [
+      "middleware_audit",
+      "middleware_audit_auditmiddleware",
+      "middleware_audit_createauditlog",
+      "middleware_audit_logaction",
+      "routes_admin",
+      "routes_admin_bcrypt",
+      "routes_admin_express",
+      "routes_admin_getdb",
+      "routes_admin_getunreadcount",
+      "routes_admin_logaction",
+      "routes_admin_notifyusercreated_notifyroleupdated",
+      "routes_admin_requireauth_requirerole",
+      "routes_admin_router",
+      "routes_auth",
+      "routes_auth_bcrypt",
+      "routes_auth_express",
+      "routes_auth_getdb",
+      "routes_auth_logaction",
+      "routes_auth_router"
+    ],
+    "4": [
+      "package",
+      "package_description",
+      "package_name",
+      "package_private",
+      "package_scripts",
+      "package_scripts_dev",
+      "package_scripts_docker_build",
+      "package_scripts_docker_down",
+      "package_scripts_docker_logs",
+      "package_scripts_docker_seed",
+      "package_scripts_docker_up",
+      "package_scripts_pm2",
+      "package_scripts_pm2_restart",
+      "package_scripts_pm2_stop",
+      "package_scripts_reset",
+      "package_scripts_seed",
+      "package_scripts_start",
+      "package_version"
+    ],
+    "5": [
+      "package_dependencies",
+      "package_dependencies_bcryptjs",
+      "package_dependencies_chart_js",
+      "package_dependencies_ejs",
+      "package_dependencies_exceljs",
+      "package_dependencies_express",
+      "package_dependencies_express_session",
+      "package_dependencies_json2csv",
+      "package_dependencies_langfuse",
+      "package_dependencies_multer",
+      "package_dependencies_nodemailer",
+      "package_dependencies_pdfkit",
+      "package_dependencies_uuid"
+    ],
+    "6": [
+      "database_schema",
+      "database_schema_closedb",
+      "database_schema_databasesync",
+      "database_schema_db_path",
+      "database_schema_initdb",
+      "database_schema_path",
+      "database_schema_wrap",
+      "database_seed",
+      "database_seed_bcrypt",
+      "database_seed_initdb_getdb",
+      "database_seed_seed"
+    ],
+    "7": [
+      "routes_invoices",
+      "routes_invoices_express",
+      "routes_invoices_getapprovedslipsnotinvoiced",
+      "routes_invoices_getdb",
+      "routes_invoices_getinvoiceslips",
+      "routes_invoices_logaction",
+      "routes_invoices_notifyinvoicecreated_notifyinvoicereconciled_notifyinvoicepaid",
+      "routes_invoices_recalcinvoice",
+      "routes_invoices_requireauth_requirerole",
+      "routes_invoices_router",
+      "routes_invoices_updateinvoiceslipstatus"
+    ],
+    "8": [
+      "docker_compose_pdm_data_volume",
+      "docker_compose_pdm_logs_volume",
+      "docker_compose_pdm_service",
+      "docker_compose_pdm_uploads_volume",
+      "docker_compose_session_secret"
+    ],
+    "9": [
+      "ecosystem_config"
+    ],
+    "10": [
+      "js_main"
+    ]
+  },
+  "cohesion": {
+    "0": 0.07586206896551724,
+    "1": 0.13,
+    "2": 0.13768115942028986,
+    "3": 0.12280701754385964,
+    "4": 0.1111111111111111,
+    "5": 0.15384615384615385,
+    "6": 0.23636363636363636,
+    "7": 0.18181818181818182,
+    "8": 0.4,
+    "9": 1.0,
+    "10": 1.0
+  },
+  "gods": [
+    {
+      "id": "database_schema_getdb",
+      "label": "getDb()",
+      "degree": 31
+    },
+    {
+      "id": "package_scripts",
+      "label": "scripts",
+      "degree": 13
+    },
+    {
+      "id": "services_notification_createnotification",
+      "label": "createNotification()",
+      "degree": 12
+    },
+    {
+      "id": "middleware_auth_requireauth",
+      "label": "requireAuth()",
+      "degree": 9
+    },
+    {
+      "id": "middleware_sessionstore_sqlitesessionstore",
+      "label": "SQLiteSessionStore",
+      "degree": 7
+    },
+    {
+      "id": "middleware_audit_logaction",
+      "label": "logAction()",
+      "degree": 6
+    },
+    {
+      "id": "database_schema_initdb",
+      "label": "initDb()",
+      "degree": 5
+    },
+    {
+      "id": "middleware_auth_requirerole",
+      "label": "requireRole()",
+      "degree": 4
+    },
+    {
+      "id": "services_notification_notifyslipsubmitted",
+      "label": "notifySlipSubmitted()",
+      "degree": 4
+    },
+    {
+      "id": "services_notification_notifyinvoicecreated",
+      "label": "notifyInvoiceCreated()",
+      "degree": 4
+    }
+  ],
+  "surprises": [
+    {
+      "source": "getUnreadCount()",
+      "target": "getDb()",
+      "source_files": [
+        "routes/admin.js",
+        "database/schema.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities; peripheral node `getUnreadCount()` unexpectedly reaches hub `getDb()`"
+    },
+    {
+      "source": "getApprovedSlipsNotInvoiced()",
+      "target": "getDb()",
+      "source_files": [
+        "routes/invoices.js",
+        "database/schema.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities; peripheral node `getApprovedSlipsNotInvoiced()` unexpectedly reaches hub `getDb()`"
+    },
+    {
+      "source": "getInvoiceSlips()",
+      "target": "getDb()",
+      "source_files": [
+        "routes/invoices.js",
+        "database/schema.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities; peripheral node `getInvoiceSlips()` unexpectedly reaches hub `getDb()`"
+    },
+    {
+      "source": "recalcInvoice()",
+      "target": "getDb()",
+      "source_files": [
+        "routes/invoices.js",
+        "database/schema.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities; peripheral node `recalcInvoice()` unexpectedly reaches hub `getDb()`"
+    },
+    {
+      "source": "updateInvoiceSlipStatus()",
+      "target": "getDb()",
+      "source_files": [
+        "routes/invoices.js",
+        "database/schema.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities; peripheral node `updateInvoiceSlipStatus()` unexpectedly reaches hub `getDb()`"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}

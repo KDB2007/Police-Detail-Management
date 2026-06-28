@@ -45,8 +45,7 @@
                   <span class="badge-<%= inv.status %>"><%= inv.status.replace('_', ' ') %></span>
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-surface-500">
-                  <div><span class="text-surface-400">Slip:</span> <%= inv.slip_number %></div>
-                  <div><span class="text-surface-400">Project:</span> <%= inv.project_number %></div>
+                  <div><span class="text-surface-400">Slip(s):</span> <%= inv.slip_numbers || 'N/A' %></div>
                   <div><span class="text-surface-400">Amount:</span> $<%= Number(inv.grand_total).toFixed(2) %></div>
                   <div><span class="text-surface-400">Billing:</span> <%= inv.billing_name %></div>
                 </div>
@@ -70,7 +69,7 @@
           <a href="/invoices/view/<%= inv.id %>" class="flex items-center justify-between p-2 hover:bg-surface-50 dark:hover:bg-surface-700/50 rounded-lg transition-colors">
             <div>
               <p class="text-sm font-medium text-surface-700 dark:text-surface-300"><%= inv.invoice_number %></p>
-              <p class="text-xs text-surface-400"><%= inv.slip_number %> • $<%= Number(inv.grand_total).toFixed(2) %></p>
+              <p class="text-xs text-surface-400"><%= inv.slip_numbers || 'N/A' %> • $<%= Number(inv.grand_total).toFixed(2) %></p>
             </div>
             <span class="badge-<%= inv.status %> text-xs"><%= inv.status.replace('_', ' ') %></span>
           </a>

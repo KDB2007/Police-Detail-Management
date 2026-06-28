@@ -40,7 +40,7 @@
                   <p class="text-sm font-medium text-surface-800 dark:text-surface-200"><%= slip.slip_number %> — <%= slip.officer_name %></p>
                   <p class="text-xs text-surface-400"><%= slip.project_number %> • <%= slip.total_hours %> hrs @ $<%= slip.rate_per_hour %>/hr • <span class="badge-approved">Approved</span></p>
                 </div>
-                <a href="/invoices/create/<%= slip.id %>" class="shrink-0 text-xs bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-lg transition-colors ml-3"><i class="fas fa-file-invoice-dollar mr-1"></i>Create Invoice</a>
+                <a href="/invoices/redirect-for-slip/<%= slip.id %>" class="shrink-0 text-xs bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-lg transition-colors ml-3"><i class="fas fa-file-invoice-dollar mr-1"></i>Invoice</a>
               </div>
             <% }) %>
           </div>
@@ -70,7 +70,7 @@
             <a href="/invoices/view/<%= inv.id %>" class="flex items-center justify-between p-2 hover:bg-surface-50 dark:hover:bg-surface-700/50 rounded-lg transition-colors">
               <div>
                 <p class="text-sm font-medium text-surface-700 dark:text-surface-300"><%= inv.invoice_number %></p>
-                <p class="text-xs text-surface-400"><%= inv.slip_number %></p>
+                <p class="text-xs text-surface-400">$<%= Number(inv.grand_total).toFixed(2) %></p>
               </div>
               <span class="badge-<%= inv.status %> text-xs"><%= inv.status.replace('_', ' ') %></span>
             </a>

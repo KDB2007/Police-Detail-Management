@@ -121,11 +121,17 @@ router.get('/view/:id', requireAuth, (req, res) => {
     FROM slip_status_history ssh LEFT JOIN users u ON ssh.changed_by = u.id
     WHERE ssh.slip_id = ? ORDER BY ssh.created_at ASC`).all(slip.id);
   const attachments = db.prepare('SELECT * FROM slip_attachments WHERE slip_id = ?').all(slip.id);
-  const invoices = db.prepare('SELECT * FROM invoices WHERE slip_id = ?').all(slip.id);
+  const invoices = db.prepare(`SELECT i.* FROM invoices i
+    JOIN invoice_slips inv_s ON i.id = inv_s.invoice_id
+    WHERE inv_s.slip_id = ?`).all(slip.id);
   const projects = db.prepare("SELECT * FROM projects WHERE status = 'active'").all();
   const unreadNotifCount = db.prepare('SELECT COUNT(*) as c FROM notifications WHERE user_id = ? AND is_read = 0').get(user.id).c;
+  let draftInvoices = [];
+  if (user.role === 'billing') {
+    draftInvoices = db.prepare('SELECT id, invoice_number, grand_total FROM invoices WHERE status = ? AND billing_team_id = ? ORDER BY created_at DESC').all('draft', user.id);
+  }
 
-  res.renderWithLayout('slips/view', { user, slip, statusHistory, attachments, invoices, projects, unreadNotifCount });
+  res.renderWithLayout('slips/view', { user, slip, statusHistory, attachments, invoices, projects, unreadNotifCount, draftInvoices });
 });
 
 router.post('/submit/:id', requireAuth, requireRole('foreman'), (req, res) => {

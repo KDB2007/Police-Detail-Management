@@ -101,6 +101,11 @@ function seed() {
   insertInvoice.run('NG-INV-2026-002', 7, 'archived', 6, 510, 6.25, 31.88, 541.88, d(-13).toISOString(), 7, d(-12).toISOString(), 7, 'PAY-REF-2026-001', d(-11).toISOString(), 7);
   insertInvoice.run('NG-INV-2026-003', 8, 'draft', 6, 0, 6.25, 0, 0, null, null, null, null, null, null, null);
 
+  const insertInvoiceSlip = db.prepare('INSERT OR IGNORE INTO invoice_slips (invoice_id, slip_id) VALUES (?, ?)');
+  insertInvoiceSlip.run(1, 6);
+  insertInvoiceSlip.run(2, 7);
+  insertInvoiceSlip.run(3, 8);
+
   const insertInvoiceLineItems = db.prepare(`INSERT INTO invoice_line_items (invoice_id, description, hours, rate, amount) VALUES (?, ?, ?, ?, ?)`);
   insertInvoiceLineItems.run(1, 'Traffic Control - Main St Pole Replacement', 7.5, 90, 675);
   insertInvoiceLineItems.run(2, 'Traffic Control - Cedar Lane Vegetation Management', 6, 85, 510);

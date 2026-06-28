@@ -60,27 +60,31 @@ function notifySlipNonBillable(slipId, foremanId, reason) {
   });
 }
 
-function notifyInvoiceCreated(invoiceId, slipId) {
+function notifyInvoiceCreated(invoiceId) {
   const db = getDb();
   const admins = db.prepare("SELECT id FROM users WHERE role = 'detail_admin' AND is_active = 1").all();
-  const slip = db.prepare('SELECT foreman_id FROM police_detail_slips WHERE id = ?').get(slipId);
   for (const a of admins) {
     createNotification({
       userId: a.id,
       type: 'invoice_created',
       title: 'New Invoice Created',
-      message: 'A new invoice has been created from an approved slip.',
+      message: 'A new invoice has been created.',
       link: `/invoices/view/${invoiceId}`
     });
   }
-  if (slip) {
-    createNotification({
-      userId: slip.foreman_id,
-      type: 'invoice_created',
-      title: 'Invoice Generated',
-      message: 'An invoice has been generated from your approved slip.',
-      link: `/invoices/view/${invoiceId}`
-    });
+  const foremen = db.prepare(`SELECT DISTINCT s.foreman_id FROM invoice_slips inv_s
+    JOIN police_detail_slips s ON inv_s.slip_id = s.id
+    WHERE inv_s.invoice_id = ?`).all(invoiceId);
+  for (const f of foremen) {
+    if (f.foreman_id) {
+      createNotification({
+        userId: f.foreman_id,
+        type: 'invoice_created',
+        title: 'Invoice Generated',
+        message: 'An invoice has been generated from your approved slip(s).',
+        link: `/invoices/view/${invoiceId}`
+      });
+    }
   }
 }
 

@@ -1,62 +1,189 @@
 <div class="mb-6">
   <a href="/dashboard" class="text-sm text-primary-600 dark:text-primary-400 hover:underline mb-2 inline-block"><i class="fas fa-arrow-left mr-1"></i>Back to Dashboard</a>
   <h2 class="text-xl font-bold text-surface-800 dark:text-white">Create Invoice</h2>
-  <p class="text-sm text-surface-500 dark:text-surface-400 mt-0.5">Generate invoice from approved slip</p>
+  <p class="text-sm text-surface-500 dark:text-surface-400 mt-0.5">Browse approved slips and select the ones to include in this invoice</p>
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-  <div class="lg:col-span-2">
-    <form method="POST" action="/invoices/create/<%= slip.id %>" class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-6 space-y-6">
-      <h3 class="font-semibold text-surface-800 dark:text-white">Invoice Details</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Hours to Bill</label>
-          <input type="number" step="0.5" name="hours" value="<%= slip.total_hours %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Rate per Hour ($)</label>
-          <input type="number" step="0.01" name="rate" value="<%= slip.rate_per_hour %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Tax Rate (%)</label>
-          <input type="number" step="0.01" name="tax_rate" value="6.25" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Payment Terms</label>
-          <select name="payment_terms" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none">
-            <option value="Net 30">Net 30</option>
-            <option value="Net 15">Net 15</option>
-            <option value="Net 45">Net 45</option>
-            <option value="Due on Receipt">Due on Receipt</option>
-          </select>
-        </div>
-        <div class="sm:col-span-2">
-          <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Notes</label>
-          <textarea name="notes" rows="3" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" placeholder="Invoice notes..."></textarea>
-        </div>
-      </div>
-      <div class="flex items-center gap-3">
-        <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white font-medium px-6 py-2.5 rounded-lg transition-colors text-sm"><i class="fas fa-file-invoice-dollar mr-1"></i>Generate Invoice</button>
-        <a href="/dashboard" class="text-surface-600 dark:text-surface-400 hover:text-surface-800 px-4 py-2.5 text-sm">Cancel</a>
-      </div>
-    </form>
+<% if (approvedSlips.length === 0) { %>
+  <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-12 text-center">
+    <i class="fas fa-check-circle text-4xl text-green-400 mb-3"></i>
+    <p class="text-surface-600 dark:text-surface-300 font-medium">No approved slips available</p>
+    <p class="text-sm text-surface-400 mt-1">All approved slips have already been invoiced.</p>
+    <a href="/dashboard" class="inline-block mt-4 text-sm text-primary-600 dark:text-primary-400 hover:underline">Back to Dashboard</a>
   </div>
+<% } else { %>
+  <form method="POST" action="/invoices/create" id="invoiceForm">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 space-y-4">
+        <!-- Search + toolbar -->
+        <div class="flex items-center gap-3">
+          <div class="relative flex-1">
+            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-surface-400 text-sm"></i>
+            <input type="text" id="slipSearch" placeholder="Search by slip number, officer, department, project..." class="w-full pl-9 pr-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none">
+          </div>
+          <label class="flex items-center gap-2 text-xs text-surface-500 cursor-pointer shrink-0 bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700 rounded-lg px-3 py-2.5 hover:bg-surface-50 dark:hover:bg-surface-700/50 transition-colors">
+            <input type="checkbox" id="selectAll" class="rounded border-surface-300 text-primary-600 focus:ring-primary-500">
+            Select All
+          </label>
+        </div>
 
-  <!-- Slip Info Sidebar -->
-  <div>
-    <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-6">
-      <h3 class="font-semibold text-surface-800 dark:text-white text-sm mb-4">Slip Information</h3>
-      <dl class="space-y-3 text-sm">
-        <div class="flex justify-between"><dt class="text-surface-400">Slip</dt><dd class="text-surface-700 dark:text-surface-300 font-medium"><%= slip.slip_number %></dd></div>
-        <div class="flex justify-between"><dt class="text-surface-400">Project</dt><dd class="text-surface-700 dark:text-surface-300"><%= slip.project_number %></dd></div>
-        <div class="flex justify-between"><dt class="text-surface-400">Officer</dt><dd class="text-surface-700 dark:text-surface-300"><%= slip.officer_name %></dd></div>
-        <div class="flex justify-between"><dt class="text-surface-400">Hours</dt><dd class="text-surface-700 dark:text-surface-300"><%= slip.total_hours %></dd></div>
-        <div class="flex justify-between"><dt class="text-surface-400">Rate</dt><dd class="text-surface-700 dark:text-surface-300">$<%= Number(slip.rate_per_hour).toFixed(2) %>/hr</dd></div>
-        <div class="flex justify-between border-t border-surface-200 dark:border-surface-700 pt-3 mt-3"><dt class="text-surface-400 font-medium">Est. Subtotal</dt><dd class="text-surface-800 dark:text-white font-bold">$<%= (slip.total_hours * slip.rate_per_hour).toFixed(2) %></dd></div>
-        <div class="flex justify-between"><dt class="text-surface-400">Location</dt><dd class="text-surface-700 dark:text-surface-300"><%= slip.location_details || 'N/A' %></dd></div>
-        <div class="flex justify-between"><dt class="text-surface-400">Foreman</dt><dd class="text-surface-700 dark:text-surface-300"><%= slip.foreman_name %></dd></div>
-        <div class="flex justify-between"><dt class="text-surface-400">Vendor</dt><dd class="text-surface-700 dark:text-surface-300"><%= slip.org_name %></dd></div>
-      </dl>
+        <!-- Slip cards -->
+        <div class="space-y-2" id="slipList">
+          <% approvedSlips.forEach(slip => { %>
+            <label class="slip-card flex items-start gap-4 p-4 bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 hover:bg-primary-50 dark:hover:bg-primary-900/10 hover:border-primary-300 dark:hover:border-primary-700 cursor-pointer transition-all" data-search="<%= (slip.slip_number + ' ' + slip.officer_name + ' ' + (slip.officer_department || '') + ' ' + slip.project_number + ' ' + (slip.org_name || '')).toLowerCase() %>">
+              <input type="checkbox" name="slip_ids" value="<%= slip.id %>" class="slip-checkbox mt-1 rounded border-surface-300 text-primary-600 focus:ring-primary-500">
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between mb-1">
+                  <p class="text-sm font-semibold text-surface-800 dark:text-surface-200"><%= slip.slip_number %></p>
+                  <span class="badge-approved text-xs">Approved</span>
+                </div>
+                <p class="text-sm text-surface-700 dark:text-surface-300"><%= slip.officer_name %><% if (slip.officer_department) { %> • <%= slip.officer_department %><% } %></p>
+                <div class="flex flex-wrap gap-x-4 gap-y-1 mt-1.5 text-xs text-surface-500">
+                  <span><i class="fas fa-folder-open mr-1"></i><%= slip.project_number %></span>
+                  <span><i class="fas fa-clock mr-1"></i><%= slip.total_hours %> hrs @ $<%= Number(slip.rate_per_hour).toFixed(2) %>/hr</span>
+                  <span><i class="fas fa-building mr-1"></i><%= slip.org_name %></span>
+                  <span class="font-medium text-surface-700 dark:text-surface-300"><i class="fas fa-dollar-sign mr-1"></i>$<%= (slip.total_hours * slip.rate_per_hour).toFixed(2) %></span>
+                </div>
+              </div>
+            </label>
+          <% }) %>
+        </div>
+        <p class="text-xs text-surface-400 text-center" id="slipCount"><%= approvedSlips.length %> slips available</p>
+      </div>
+
+      <!-- Invoice Settings Sidebar -->
+      <div>
+        <div class="bg-white dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 p-6 space-y-4 sticky top-6">
+          <h3 class="font-semibold text-surface-800 dark:text-white text-sm"><i class="fas fa-gear mr-1"></i>Invoice Settings</h3>
+          <div>
+            <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Tax Rate (%)</label>
+            <input type="number" step="0.01" name="tax_rate" value="6.25" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Payment Terms</label>
+            <select name="payment_terms" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none">
+              <option value="Net 30">Net 30</option>
+              <option value="Net 15">Net 15</option>
+              <option value="Net 45">Net 45</option>
+              <option value="Due on Receipt">Due on Receipt</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Notes</label>
+            <textarea name="notes" rows="3" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" placeholder="Invoice notes..."></textarea>
+          </div>
+
+          <!-- Summary -->
+          <div class="pt-3 border-t border-surface-200 dark:border-surface-700 space-y-3">
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-surface-500">Selected Slips</span>
+              <span class="font-bold text-surface-800 dark:text-white" id="selectedCount">0</span>
+            </div>
+            <div id="selectedList" class="max-h-36 overflow-y-auto space-y-1.5 hidden">
+              <!-- Dynamically populated -->
+            </div>
+            <div class="flex items-center justify-between text-sm pt-2 border-t border-surface-200 dark:border-surface-700">
+              <span class="text-surface-500">Est. Total</span>
+              <span class="font-bold text-primary-600 dark:text-primary-400 text-base" id="estTotal">$0.00</span>
+            </div>
+          </div>
+
+          <button type="submit" disabled class="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-surface-300 dark:disabled:bg-surface-600 disabled:cursor-not-allowed text-white font-medium px-6 py-2.5 rounded-lg transition-colors text-sm"><i class="fas fa-file-invoice-dollar mr-1"></i>Generate Invoice</button>
+        </div>
+        <a href="/dashboard" class="block text-center mt-3 text-sm text-surface-500 hover:text-surface-700">Cancel</a>
+      </div>
     </div>
-  </div>
-</div>
+  </form>
+<% } %>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const checkboxes = document.querySelectorAll('.slip-checkbox');
+  const selectAll = document.getElementById('selectAll');
+  const selectedCount = document.getElementById('selectedCount');
+  const estTotal = document.getElementById('estTotal');
+  const selectedList = document.getElementById('selectedList');
+  const submitBtn = document.querySelector('#invoiceForm button[type=submit]');
+
+  const slipData = {};
+  document.querySelectorAll('.slip-card').forEach(card => {
+    const cb = card.querySelector('.slip-checkbox');
+    const number = card.querySelector('.font-semibold').textContent;
+    const name = card.querySelector('.text-surface-700')?.textContent || '';
+    const totalEl = card.querySelector('.font-medium');
+    const total = parseFloat(totalEl.textContent.replace(/[^0-9.]/g, '')) || 0;
+    slipData[cb.value] = { number, name, total, card };
+  });
+
+  function updateSummary() {
+    const checked = document.querySelectorAll('.slip-checkbox:checked');
+    const count = checked.length;
+    selectedCount.textContent = count;
+    let total = 0;
+
+    if (count > 0) {
+      selectedList.classList.remove('hidden');
+      selectedList.innerHTML = '';
+      checked.forEach(cb => {
+        const d = slipData[cb.value];
+        if (d) {
+          total += d.total;
+          const div = document.createElement('div');
+          div.className = 'flex items-center justify-between text-xs text-surface-600 dark:text-surface-300';
+          div.innerHTML = '<span>' + d.number + '</span><span>$' + d.total.toFixed(2) + '</span>';
+          selectedList.appendChild(div);
+        }
+      });
+    } else {
+      selectedList.classList.add('hidden');
+    }
+
+    estTotal.textContent = '$' + total.toFixed(2);
+    submitBtn.disabled = count === 0;
+    if (count > 0) {
+      submitBtn.innerHTML = '<i class="fas fa-file-invoice-dollar mr-1"></i>Generate Invoice (' + count + ' slips)';
+    } else {
+      submitBtn.innerHTML = '<i class="fas fa-file-invoice-dollar mr-1"></i>Generate Invoice';
+    }
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateSummary));
+
+  if (selectAll) {
+    selectAll.addEventListener('change', function() {
+      const searchVal = document.getElementById('slipSearch').value.toLowerCase();
+      document.querySelectorAll('.slip-card').forEach(card => {
+        const cb = card.querySelector('.slip-checkbox');
+        if (searchVal === '' || card.dataset.search.includes(searchVal)) {
+          cb.checked = selectAll.checked;
+        } else {
+          cb.checked = false;
+        }
+      });
+      updateSummary();
+    });
+  }
+
+  // Search filter
+  document.getElementById('slipSearch').addEventListener('input', function() {
+    const q = this.value.toLowerCase();
+    let visible = 0;
+    document.querySelectorAll('.slip-card').forEach(card => {
+      const match = q === '' || card.dataset.search.includes(q);
+      card.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+    document.getElementById('slipCount').textContent = visible + ' slips available';
+    // Deselect hidden checkboxes and update summary
+    document.querySelectorAll('.slip-checkbox:checked').forEach(cb => {
+      const card = cb.closest('.slip-card');
+      if (card && card.style.display === 'none') {
+        cb.checked = false;
+      }
+    });
+    updateSummary();
+  });
+
+  updateSummary();
+});
+</script>

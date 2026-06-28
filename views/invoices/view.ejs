@@ -13,11 +13,11 @@
             <h2 class="text-xl font-bold text-surface-800 dark:text-white"><%= invoice.invoice_number %></h2>
             <span class="badge-<%= invoice.status %> text-sm"><%= invoice.status.replace('_', ' ') %></span>
           </div>
-          <p class="text-sm text-surface-500">Slip: <%= invoice.slip_number %> • Project: <%= invoice.project_number %></p>
-          <p class="text-sm text-surface-500"><%= invoice.org_name %></p>
+          <p class="text-sm text-surface-500"><%= invoice.org_name %> • <%= invoiceSlips.length %> slip(s)</p>
         </div>
         <div class="flex gap-2 flex-wrap">
           <% if (invoice.status === 'draft' && user.role === 'billing' && invoice.billing_team_id === user.id) { %>
+            <button onclick="document.getElementById('addSlipModal').classList.remove('hidden')" class="bg-surface-600 hover:bg-surface-700 text-white text-xs font-medium px-4 py-2 rounded-lg transition-colors"><i class="fas fa-plus mr-1"></i>Add Slip</button>
             <form method="POST" action="/invoices/submit/<%= invoice.id %>" class="inline"><button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white text-xs font-medium px-4 py-2 rounded-lg transition-colors"><i class="fas fa-paper-plane mr-1"></i>Submit</button></form>
           <% } %>
           <% if ((invoice.status === 'submitted' || invoice.status === 'under_review') && user.role === 'detail_admin') { %>
@@ -31,6 +31,45 @@
           <% } %>
         </div>
       </div>
+
+      <!-- Linked Slips -->
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="font-semibold text-surface-800 dark:text-white text-sm">Linked Slips</h3>
+        <% if (invoice.status === 'draft' && user.role === 'billing' && invoice.billing_team_id === user.id && availableSlips.length > 0) { %>
+          <button onclick="document.getElementById('addSlipModal').classList.remove('hidden')" class="text-xs bg-surface-600 hover:bg-surface-700 text-white px-3 py-1.5 rounded-lg transition-colors"><i class="fas fa-plus mr-1"></i>Add Slip</button>
+        <% } %>
+      </div>
+      <div class="overflow-x-auto mb-4">
+        <table class="w-full text-sm">
+          <thead><tr class="text-left text-xs text-surface-500 uppercase tracking-wider"><th class="pb-2 font-medium">Slip #</th><th class="pb-2 font-medium">Officer</th><th class="pb-2 font-medium">Project</th><th class="pb-2 font-medium">Hours</th><th class="pb-2 font-medium">Rate</th><th class="pb-2 font-medium">Amount</th><% if (invoice.status === 'draft' && user.role === 'billing' && invoice.billing_team_id === user.id) { %><th class="pb-2 font-medium"></th><% } %></tr></thead>
+          <tbody class="divide-y divide-surface-100 dark:divide-surface-700">
+            <% invoiceSlips.forEach(s => { %>
+              <tr class="hover:bg-surface-50 dark:hover:bg-surface-700/20">
+                <td class="py-2.5 text-surface-800 dark:text-surface-200 font-medium"><%= s.slip_number %></td>
+                <td class="py-2.5 text-surface-600"><%= s.officer_name %></td>
+                <td class="py-2.5 text-surface-600"><%= s.project_number %></td>
+                <td class="py-2.5 text-surface-600"><%= s.total_hours %></td>
+                <td class="py-2.5 text-surface-600">$<%= Number(s.rate_per_hour).toFixed(2) %></td>
+                <td class="py-2.5 text-surface-800 dark:text-surface-200 font-medium">$<%= (s.total_hours * s.rate_per_hour).toFixed(2) %></td>
+                <% if (invoice.status === 'draft' && user.role === 'billing' && invoice.billing_team_id === user.id) { %>
+                  <td class="py-2.5"><form method="POST" action="/invoices/<%= invoice.id %>/remove-slip/<%= s.id %>" class="inline" onsubmit="return confirm('Remove <%- s.slip_number %> from this invoice?')"><button type="submit" class="text-red-400 hover:text-red-600 transition-colors" title="Remove slip"><i class="fas fa-times"></i></button></form></td>
+                <% } %>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Add Slip Button (below table) -->
+      <% if (invoice.status === 'draft' && user.role === 'billing' && invoice.billing_team_id === user.id) { %>
+        <% if (availableSlips.length > 0) { %>
+          <div class="mb-4">
+            <button onclick="document.getElementById('addSlipModal').classList.remove('hidden')" class="w-full border-2 border-dashed border-primary-300 dark:border-primary-700 hover:border-primary-500 dark:hover:border-primary-500 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium px-4 py-3 rounded-lg transition-colors text-sm"><i class="fas fa-plus-circle mr-2"></i>Add More Slips to This Invoice</button>
+          </div>
+        <% } else { %>
+          <div class="mb-4 p-3 bg-surface-50 dark:bg-surface-700/30 rounded-lg text-center text-sm text-surface-400">All approved slips have been added to this invoice.</div>
+        <% } %>
+      <% } %>
 
       <!-- Line Items -->
       <h3 class="font-semibold text-surface-800 dark:text-white text-sm mb-3">Line Items</h3>
@@ -53,8 +92,8 @@
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
         <div><p class="text-xs text-surface-400">Billing Contact</p><p class="font-medium text-surface-700 dark:text-surface-300"><%= invoice.billing_name %></p></div>
         <div><p class="text-xs text-surface-400">Payment Terms</p><p class="font-medium text-surface-700 dark:text-surface-300"><%= invoice.payment_terms || 'Net 30' %></p></div>
-        <div><p class="text-xs text-surface-400">Slip</p><p class="font-medium text-surface-700 dark:text-surface-300"><%= invoice.slip_number %></p></div>
-        <div><p class="text-xs text-surface-400">Project</p><p class="font-medium text-surface-700 dark:text-surface-300"><%= invoice.project_number %></p></div>
+        <div><p class="text-xs text-surface-400">Slips</p><p class="font-medium text-surface-700 dark:text-surface-300"><%= invoiceSlips.length %></p></div>
+        <div><p class="text-xs text-surface-400">Organization</p><p class="font-medium text-surface-700 dark:text-surface-300"><%= invoice.org_name %></p></div>
       </div>
       <% if (invoice.notes) { %>
         <div class="mt-4 pt-4 border-t border-surface-200 dark:border-surface-700"><p class="text-xs text-surface-400 mb-1">Notes</p><p class="text-sm text-surface-600"><%= invoice.notes %></p></div>
@@ -97,7 +136,7 @@
             </div>
             <div class="min-w-0 flex-1">
               <p class="text-sm font-medium text-surface-800 dark:text-surface-200"><%= h.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) %></p>
-              <p class="text-xs text-surface-500"><%= h.changed_by_name || 'System' %> • <%= new Date(h.created_at).toLocaleString() %></p>
+              <p class="text-xs text-surface-500"><%= h.changed_by_name || 'System' %> • <%= new Date(h.created_at + 'Z').toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }) %> IST</p>
               <% if (h.comments) { %><p class="text-xs text-surface-400 mt-0.5"><%= h.comments %></p><% } %>
             </div>
           </div>
@@ -130,7 +169,7 @@
     <form method="POST" action="/invoices/reconcile/<%= invoice.id %>" class="space-y-4">
       <div class="p-4 bg-surface-50 dark:bg-surface-700/50 rounded-lg">
         <p class="text-sm text-surface-600 dark:text-surface-300">Invoice Amount: <span class="font-bold text-surface-800 dark:text-white">$<%= Number(invoice.grand_total).toFixed(2) %></span></p>
-        <p class="text-xs text-surface-400 mt-1">Verify that the invoice details match the approved slip before reconciling.</p>
+        <p class="text-xs text-surface-400 mt-1">Verify that the invoice details match before reconciling.</p>
       </div>
       <div>
         <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-2">Action</label>
@@ -165,11 +204,104 @@
       <div class="p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
         <p class="text-sm text-emerald-700 dark:text-emerald-300">Amount to Pay: <span class="font-bold">$<%= Number(invoice.grand_total).toFixed(2) %></span></p>
       </div>
-      <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Payment Reference</label><input type="text" name="payment_reference" required class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" placeholder="e.g. PAY-REF-2024-001"></div>
+      <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Payment Reference</label><input type="text" name="payment_reference" required class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" placeholder="e.g. PAY-REF-2026-001"></div>
       <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Payment Date</label><input type="date" name="payment_date" value="<%= new Date().toISOString().split('T')[0] %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none"></div>
       <div><label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Comments</label><textarea name="payment_comments" rows="2" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" placeholder="Payment comments..."></textarea></div>
       <div class="flex gap-3 pt-2"><button type="submit" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2.5 rounded-lg text-sm"><i class="fas fa-check mr-1"></i>Confirm Payment</button><button type="button" onclick="document.getElementById('payModal').classList.add('hidden')" class="px-4 py-2.5 text-sm text-surface-600 hover:text-surface-800">Cancel</button></div>
     </form>
   </div>
 </div>
+<% } %>
+
+<!-- Add Slip Modal (Full Billing Dashboard style) -->
+<% if (invoice.status === 'draft' && user.role === 'billing' && invoice.billing_team_id === user.id) { %>
+<div id="addSlipModal" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center hidden" onclick="if(event.target===this)this.classList.add('hidden')">
+  <div class="bg-white dark:bg-surface-800 rounded-2xl shadow-2xl w-full max-w-3xl mx-4 p-6 max-h-[90vh] flex flex-col">
+    <div class="flex items-center justify-between mb-4 shrink-0">
+      <div>
+        <h3 class="text-lg font-bold text-surface-800 dark:text-white">Add Slip to Invoice</h3>
+        <p class="text-sm text-surface-500 dark:text-surface-400 mt-0.5">Select an approved slip to add to <strong><%= invoice.invoice_number %></strong></p>
+      </div>
+      <button onclick="document.getElementById('addSlipModal').classList.add('hidden')" class="text-surface-400 hover:text-surface-600"><i class="fas fa-times text-lg"></i></button>
+    </div>
+    <% if (availableSlips.length === 0) { %>
+      <div class="flex-1 flex items-center justify-center text-surface-400">
+        <div class="text-center"><i class="fas fa-check-circle text-4xl mb-3 text-green-400"></i><p class="text-sm font-medium">All approved slips have been invoiced</p><p class="text-xs mt-1">No additional slips available to add.</p></div>
+      </div>
+      <div class="flex justify-end pt-4 border-t border-surface-200 dark:border-surface-700 shrink-0"><button type="button" onclick="document.getElementById('addSlipModal').classList.add('hidden')" class="px-4 py-2.5 text-sm text-surface-600 hover:text-surface-800">Close</button></div>
+    <% } else { %>
+      <form method="POST" action="/invoices/<%= invoice.id %>/add-slip" class="flex flex-col flex-1 min-h-0">
+        <div class="flex items-center gap-3 mb-3 shrink-0">
+          <div class="relative flex-1">
+            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-surface-400 text-sm"></i>
+            <input type="text" id="slipSearch" placeholder="Search slips..." class="w-full pl-9 pr-3 py-2 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" oninput="filterSlips()">
+          </div>
+          <span class="text-xs text-surface-400" id="slipCount"><%= availableSlips.length %> available</span>
+        </div>
+        <div class="flex-1 overflow-y-auto space-y-2 pr-1">
+          <% availableSlips.forEach(s => { %>
+            <label class="slip-card flex items-start gap-4 p-4 border border-surface-200 dark:border-surface-700 rounded-xl hover:bg-primary-50 dark:hover:bg-primary-900/10 hover:border-primary-300 dark:hover:border-primary-700 cursor-pointer transition-all" data-search="<%= s.slip_number %> <%= s.officer_name %> <%= s.officer_department %> <%= s.project_number %> <%= s.org_name %>">
+              <input type="radio" name="slip_id" value="<%= s.id %>" class="slip-radio mt-1 text-primary-600 focus:ring-primary-500" <%= availableSlips.length === 1 ? 'checked' : '' %> required>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between mb-1">
+                  <p class="text-sm font-semibold text-surface-800 dark:text-surface-200"><%= s.slip_number %></p>
+                  <span class="badge-approved text-xs">Approved</span>
+                </div>
+                <p class="text-sm text-surface-700 dark:text-surface-300"><%= s.officer_name %> • <%= s.officer_department %></p>
+                <div class="flex flex-wrap gap-x-4 gap-y-1 mt-1.5 text-xs text-surface-500">
+                  <span><i class="fas fa-folder-open mr-1"></i><%= s.project_number %></span>
+                  <span><i class="fas fa-clock mr-1"></i><%= s.total_hours %> hrs</span>
+                  <span><i class="fas fa-dollar-sign mr-1"></i>$<%= Number(s.rate_per_hour).toFixed(2) %>/hr</span>
+                  <span><i class="fas fa-building mr-1"></i><%= s.org_name %></span>
+                  <span class="font-medium text-surface-700 dark:text-surface-300">$<%= (s.total_hours * s.rate_per_hour).toFixed(2) %></span>
+                </div>
+              </div>
+            </label>
+          <% }) %>
+        </div>
+        <div class="flex items-center justify-between pt-4 border-t border-surface-200 dark:border-surface-700 mt-4 shrink-0">
+          <div class="flex items-center gap-2 text-sm text-surface-500">
+            <span id="selectedSlipName">No slip selected</span>
+          </div>
+          <div class="flex gap-3">
+            <button type="button" onclick="document.getElementById('addSlipModal').classList.add('hidden')" class="px-4 py-2.5 text-sm text-surface-600 hover:text-surface-800">Cancel</button>
+            <button type="submit" id="addSlipSubmit" disabled class="bg-primary-600 hover:bg-primary-700 disabled:bg-surface-300 dark:disabled:bg-surface-600 disabled:cursor-not-allowed text-white font-medium px-5 py-2.5 rounded-lg text-sm transition-colors"><i class="fas fa-plus mr-1"></i>Add to Invoice</button>
+          </div>
+        </div>
+      </form>
+    <% } %>
+  </div>
+</div>
+
+<script>
+function filterSlips() {
+  const q = document.getElementById('slipSearch').value.toLowerCase();
+  const cards = document.querySelectorAll('.slip-card');
+  let visible = 0;
+  cards.forEach(c => {
+    const match = c.dataset.search.toLowerCase().includes(q);
+    c.style.display = match ? '' : 'none';
+    if (match) visible++;
+  });
+  document.getElementById('slipCount').textContent = visible + ' available';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const radios = document.querySelectorAll('.slip-radio');
+  const submitBtn = document.getElementById('addSlipSubmit');
+  const selectedName = document.getElementById('selectedSlipName');
+  radios.forEach(r => {
+    r.addEventListener('change', function() {
+      const card = this.closest('.slip-card');
+      const name = card ? card.querySelector('.font-semibold').textContent : 'No slip selected';
+      selectedName.textContent = 'Selected: ' + name;
+      submitBtn.disabled = !this.checked;
+    });
+  });
+  if (radios.length === 1) {
+    radios[0].checked = true;
+    radios[0].dispatchEvent(new Event('change'));
+  }
+});
+</script>
 <% } %>

@@ -1,8 +1,23 @@
-<div class="min-h-screen flex bg-gradient-to-br from-primary-900 via-primary-800 to-surface-900">
+<% const roleGrads = {
+  foreman: { bg: 'from-blue-700 via-blue-800 to-blue-950', icon: 'bg-blue-500/30', btn: 'bg-blue-600 hover:bg-blue-700', primary: 'blue', border: 'border-blue-200 dark:border-blue-800', text: 'text-blue-700 dark:text-blue-300', bgAlert: 'bg-blue-50 dark:bg-blue-900/20' },
+  arborist: { bg: 'from-emerald-700 via-emerald-800 to-emerald-950', icon: 'bg-emerald-500/30', btn: 'bg-emerald-600 hover:bg-emerald-700', primary: 'emerald', border: 'border-emerald-200 dark:border-emerald-800', text: 'text-emerald-700 dark:text-emerald-300', bgAlert: 'bg-emerald-50 dark:bg-emerald-900/20' },
+  billing: { bg: 'from-violet-700 via-violet-800 to-violet-950', icon: 'bg-violet-500/30', btn: 'bg-violet-600 hover:bg-violet-700', primary: 'violet', border: 'border-violet-200 dark:border-violet-800', text: 'text-violet-700 dark:text-violet-300', bgAlert: 'bg-violet-50 dark:bg-violet-900/20' },
+  detail_admin: { bg: 'from-amber-700 via-amber-800 to-amber-950', icon: 'bg-amber-500/30', btn: 'bg-amber-600 hover:bg-amber-700', primary: 'amber', border: 'border-amber-200 dark:border-amber-800', text: 'text-amber-700 dark:text-amber-300', bgAlert: 'bg-amber-50 dark:bg-amber-900/20' },
+  super_admin: { bg: 'from-rose-700 via-rose-800 to-rose-950', icon: 'bg-rose-500/30', btn: 'bg-rose-600 hover:bg-rose-700', primary: 'rose', border: 'border-rose-200 dark:border-rose-800', text: 'text-rose-700 dark:text-rose-300', bgAlert: 'bg-rose-50 dark:bg-rose-900/20' }
+};
+const rc = selectedRole && roleGrads[selectedRole] ? roleGrads[selectedRole] : null;
+const bgClass = rc ? rc.bg : 'from-primary-900 via-primary-800 to-surface-900';
+const iconClass = rc ? rc.icon : 'bg-white/10';
+const btnClass = rc ? rc.btn : 'bg-primary-600 hover:bg-primary-700';
+const alertBorder = rc ? rc.border : 'border-primary-200 dark:border-primary-800';
+const alertText = rc ? rc.text : 'text-primary-700 dark:text-primary-300';
+const alertBg = rc ? rc.bgAlert : 'bg-primary-50 dark:bg-primary-900/20';
+%>
+<div class="min-h-screen flex bg-gradient-to-br <%= bgClass %>">
   <div class="flex-1 flex items-center justify-center px-4 py-12">
     <div class="w-full max-w-md">
       <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-white/10 backdrop-blur rounded-2xl mb-4 shadow-lg">
+        <div class="inline-flex items-center justify-center w-16 h-16 <%= iconClass %> backdrop-blur rounded-2xl mb-4 shadow-lg">
           <i class="fas fa-shield-halved text-white text-3xl"></i>
         </div>
         <h2 class="text-2xl font-bold text-white">Welcome to PDM</h2>
@@ -15,7 +30,7 @@
           </div>
         <% } %>
         <% if (typeof selectedRole !== 'undefined' && selectedRole) { %>
-          <div class="mb-6 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
+          <div class="mb-6 <%= alertBg %> border <%= alertBorder %> <%= alertText %> px-4 py-3 rounded-lg text-sm flex items-center gap-2">
             <i class="fas fa-info-circle"></i><span>Logging in as <strong><%= selectedRole.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) %></strong></span>
           </div>
         <% } %>
@@ -37,7 +52,7 @@
               <input type="password" name="password" required class="w-full pl-10 pr-4 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-surface-800 dark:text-surface-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors text-sm" placeholder="Enter your password">
             </div>
           </div>
-          <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors text-sm flex items-center justify-center gap-2">
+          <button type="submit" class="w-full <%= btnClass %> text-white font-medium py-2.5 px-4 rounded-lg transition-colors text-sm flex items-center justify-center gap-2">
             <i class="fas fa-right-to-bracket"></i>Sign In
           </button>
         </form>
