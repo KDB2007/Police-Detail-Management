@@ -78,6 +78,17 @@ router.post('/create', requireAuth, requireRole('foreman'), upload.array('attach
     return res.renderWithLayout('slips/create', { user, projects, slip: req.body, errors, unreadNotifCount });
   }
 
+  // Duplicate check: same officer, same shift times, same location
+  const existing = db.prepare(`SELECT id, slip_number, status FROM police_detail_slips
+    WHERE officer_name = ? AND shift_start = ? AND shift_end = ? AND COALESCE(location_details,'') = COALESCE(?,'')
+    LIMIT 1`).get(officer_name, shift_start, shift_end, location_details || '');
+  if (existing) {
+    const projects = db.prepare("SELECT * FROM projects WHERE status = 'active'").all();
+    const unreadNotifCount = db.prepare('SELECT COUNT(*) as c FROM notifications WHERE user_id = ? AND is_read = 0').get(user.id).c;
+    errors.push(`Duplicate slip detected — ${existing.slip_number} (${existing.status}) already exists for ${officer_name} at this location on the same date/time.`);
+    return res.renderWithLayout('slips/create', { user, projects, slip: req.body, errors, unreadNotifCount });
+  }
+
   const slipNumber = `PDS-${new Date().getFullYear()}-${String(db.prepare("SELECT COUNT(*) as c FROM police_detail_slips WHERE strftime('%Y', created_at) = strftime('%Y', 'now')").get().c + 1).padStart(3, '0')}`;
   const rate = rate_per_hour || 85.00;
 
