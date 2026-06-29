@@ -27,32 +27,32 @@
         <input type="text" name="officer_name" required value="<%= slip ? slip.officer_name : '' %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" placeholder="e.g. Officer Roberts">
       </div>
       <div>
-        <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Badge Number</label>
-        <input type="text" name="officer_badge" value="<%= slip ? slip.officer_badge : '' %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" placeholder="e.g. B-1234">
+        <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Badge Number <span class="text-red-500">*</span></label>
+        <input type="text" name="officer_badge" required value="<%= slip ? slip.officer_badge : '' %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" placeholder="e.g. B-1234">
       </div>
       <div>
-        <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Department</label>
-        <input type="text" name="officer_department" value="<%= slip ? slip.officer_department : '' %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" placeholder="e.g. Boston PD">
+        <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Department <span class="text-red-500">*</span></label>
+        <input type="text" name="officer_department" required value="<%= slip ? slip.officer_department : '' %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" placeholder="e.g. Boston PD">
       </div>
       <div>
         <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Shift Start <span class="text-red-500">*</span></label>
-        <input type="datetime-local" name="shift_start" required value="<%= slip ? slip.shift_start : '' %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none">
+        <input type="datetime-local" name="shift_start" id="shift_start" required value="<%= slip ? slip.shift_start : '' %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" onchange="calcHours()">
       </div>
       <div>
         <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Shift End <span class="text-red-500">*</span></label>
-        <input type="datetime-local" name="shift_end" required value="<%= slip ? slip.shift_end : '' %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none">
+        <input type="datetime-local" name="shift_end" id="shift_end" required value="<%= slip ? slip.shift_end : '' %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" onchange="calcHours()">
       </div>
       <div>
         <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Total Hours <span class="text-red-500">*</span></label>
-        <input type="number" step="0.5" name="total_hours" required value="<%= slip ? slip.total_hours : '' %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" placeholder="e.g. 8">
+        <input type="number" step="0.25" name="total_hours" id="total_hours" required value="<%= slip ? slip.total_hours : '' %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none bg-surface-100 dark:bg-surface-600" placeholder="Auto-calculated" readonly>
       </div>
       <div>
         <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Rate per Hour ($)</label>
         <input type="number" step="0.01" name="rate_per_hour" value="<%= slip ? slip.rate_per_hour : '85.00' %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" placeholder="85.00">
       </div>
       <div>
-        <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Location Details</label>
-        <input type="text" name="location_details" value="<%= slip ? slip.location_details : '' %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" placeholder="e.g. Main St & First Ave">
+        <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Location Details <span class="text-red-500">*</span></label>
+        <input type="text" name="location_details" required value="<%= slip ? slip.location_details : '' %>" class="w-full px-3 py-2.5 border border-surface-300 dark:border-surface-600 rounded-lg bg-white dark:bg-surface-700 text-sm focus:ring-2 focus:ring-primary-500 outline-none" placeholder="e.g. Main St & First Ave">
       </div>
       <div>
         <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">Crew Information</label>
@@ -75,3 +75,24 @@
     </div>
   </form>
 </div>
+
+<script>
+function calcHours() {
+  const start = document.getElementById('shift_start').value;
+  const end = document.getElementById('shift_end').value;
+  const hoursInput = document.getElementById('total_hours');
+  if (start && end) {
+    const diff = new Date(end) - new Date(start);
+    if (diff > 0) {
+      hoursInput.value = (diff / (1000 * 60 * 60)).toFixed(2);
+    } else {
+      hoursInput.value = '';
+    }
+  } else {
+    hoursInput.value = '';
+  }
+}
+<% if (slip && slip.shift_start && slip.shift_end) { %>
+calcHours();
+<% } %>
+</script>

@@ -69,8 +69,20 @@ router.post('/create', requireAuth, requireRole('foreman'), upload.array('attach
   const errors = [];
   if (!project_id) errors.push('Project is required');
   if (!officer_name) errors.push('Officer name is required');
+  if (!officer_badge) errors.push('Badge number is required');
+  if (!officer_department) errors.push('Department is required');
+  if (!location_details) errors.push('Location details are required');
   if (!shift_start || !shift_end) errors.push('Shift start and end times are required');
-  if (!total_hours || total_hours <= 0) errors.push('Valid total hours are required');
+
+  // Auto-calculate hours from shift times
+  let calculatedHours = total_hours;
+  if (shift_start && shift_end) {
+    const diff = new Date(shift_end) - new Date(shift_start);
+    if (diff > 0) {
+      calculatedHours = (diff / (1000 * 60 * 60)).toFixed(2);
+    }
+  }
+  if (!calculatedHours || calculatedHours <= 0) errors.push('Valid total hours are required');
 
   if (errors.length > 0) {
     const projects = db.prepare("SELECT * FROM projects WHERE status = 'active'").all();
@@ -151,6 +163,32 @@ router.post('/submit/:id', requireAuth, requireRole('foreman'), (req, res) => {
   const slip = db.prepare('SELECT * FROM police_detail_slips WHERE id = ? AND foreman_id = ?').get(req.params.id, user.id);
   if (!slip) return res.status(404).json({ error: 'Slip not found' });
   if (slip.status !== 'draft' && slip.status !== 'changes_requested') return res.status(400).json({ error: 'Only draft or changes_requested slips can be submitted' });
+
+  // Ensure all required fields are filled before submission
+  const missing = [];
+  if (!slip.project_id) missing.push('Project');
+  if (!slip.officer_name) missing.push('Officer name');
+  if (!slip.officer_badge) missing.push('Badge number');
+  if (!slip.officer_department) missing.push('Department');
+  if (!slip.location_details) missing.push('Location details');
+  if (!slip.shift_start) missing.push('Shift start');
+  if (!slip.shift_end) missing.push('Shift end');
+  if (!slip.total_hours || slip.total_hours <= 0) missing.push('Total hours');
+  if (missing.length > 0) {
+    return res.status(400).json({ error: `Please fill in the following fields before submitting: ${missing.join(', ')}` });
+  }
+
+  // Recalculate hours from shift times
+  let calculatedHours = slip.total_hours;
+  if (slip.shift_start && slip.shift_end) {
+    const diff = new Date(slip.shift_end) - new Date(slip.shift_start);
+    if (diff > 0) {
+      calculatedHours = (diff / (1000 * 60 * 60)).toFixed(2);
+    }
+  }
+  if (calculatedHours != slip.total_hours) {
+    db.prepare('UPDATE police_detail_slips SET total_hours = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?').run(calculatedHours, slip.id);
+  }
 
   db.prepare("UPDATE police_detail_slips SET status = 'submitted', submitted_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE id = ?").run(slip.id);
   db.prepare('INSERT INTO slip_status_history (slip_id, status, changed_by, changed_by_role, comments) VALUES (?, ?, ?, ?, ?)').run(slip.id, 'submitted', user.id, user.role, 'Submitted for review');
@@ -248,7 +286,16 @@ router.post('/edit/:id', requireAuth, requireRole('foreman'), (req, res) => {
   if (!slip) return res.status(404).json({ error: 'Slip not found' });
   if (slip.status !== 'draft' && slip.status !== 'changes_requested') return res.status(400).json({ error: 'Only draft or changes_requested slips can be edited' });
 
-  const { project_id, officer_name, officer_badge, officer_department, shift_start, shift_end, total_hours, rate_per_hour, location_details, crew_info, notes } = req.body;
+  let { project_id, officer_name, officer_badge, officer_department, shift_start, shift_end, total_hours, rate_per_hour, location_details, crew_info, notes } = req.body;
+
+  // Auto-calculate hours from shift times
+  if (shift_start && shift_end) {
+    const diff = new Date(shift_end) - new Date(shift_start);
+    if (diff > 0) {
+      total_hours = (diff / (1000 * 60 * 60)).toFixed(2);
+    }
+  }
+
   db.prepare(`UPDATE police_detail_slips SET project_id=?, officer_name=?, officer_badge=?, officer_department=?, shift_start=?, shift_end=?, total_hours=?, rate_per_hour=?, location_details=?, crew_info=?, notes=?, updated_at=CURRENT_TIMESTAMP WHERE id=?`).run(
     project_id, officer_name, officer_badge, officer_department, shift_start, shift_end, total_hours, rate_per_hour || 85, location_details, crew_info, notes, slip.id
   );
