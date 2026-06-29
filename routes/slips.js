@@ -162,6 +162,37 @@ router.post('/submit/:id', requireAuth, requireRole('foreman'), (req, res) => {
   res.redirect(`/slips/view/${slip.id}`);
 });
 
+router.post('/delete/:id', requireAuth, (req, res) => {
+  const db = getDb();
+  const user = req.session.user;
+  const slip = db.prepare('SELECT * FROM police_detail_slips WHERE id = ?').get(req.params.id);
+  if (!slip) return res.status(404).json({ error: 'Slip not found' });
+
+  // Only the foreman (draft/changes_requested) or super_admin can delete
+  if (user.role === 'foreman' && slip.foreman_id === user.id) {
+    if (slip.status !== 'draft' && slip.status !== 'changes_requested') {
+      return res.status(400).json({ error: 'Only draft or changes_requested slips can be deleted' });
+    }
+  } else if (user.role !== 'super_admin') {
+    return res.status(403).json({ error: 'Not authorized to delete this slip' });
+  }
+
+  // Check if slip is linked to any invoice
+  const invLink = db.prepare('SELECT invoice_id FROM invoice_slips WHERE slip_id = ?').get(slip.id);
+  if (invLink) {
+    return res.status(400).json({ error: 'Cannot delete a slip that is linked to an invoice. Remove it from the invoice first.' });
+  }
+
+  db.prepare('DELETE FROM slip_status_history WHERE slip_id = ?').run(slip.id);
+  db.prepare('DELETE FROM slip_attachments WHERE slip_id = ?').run(slip.id);
+  db.prepare('DELETE FROM notifications WHERE entity_type = ? AND entity_id = ?').run('slip', slip.id);
+  db.prepare('DELETE FROM police_detail_slips WHERE id = ?').run(slip.id);
+
+  logAction({ userId: user.id, username: user.username, role: user.role, action: 'DELETE', entityType: 'slip', entityId: slip.id, beforeState: { slip_number: slip.slip_number, status: slip.status }, ip: req.ip });
+
+  res.redirect('/slips');
+});
+
 router.post('/review/:id', requireAuth, requireRole('arborist'), (req, res) => {
   const db = getDb();
   const user = req.session.user;
